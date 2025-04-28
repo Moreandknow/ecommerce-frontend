@@ -1,11 +1,13 @@
 <template>
-  <div>Homepage</div>
+  <div>Auth</div>
 </template>
 
 <script setup>
 definePageMeta({
+  layout: "auth",
   header: {
-    showProfile: false,
+    showProfile: true,
+    title: "Auth",
   },
 });
 </script>

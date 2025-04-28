@@ -1,10 +1,18 @@
 <template>
-  <UButton variant="link" color="white" :padded="false" to="/" class="logo">
+  <UButton variant="link" :color="color" :padded="false" to="/" class="logo">
     MoreAndShop
   </UButton>
 </template>
 
-<script setup></script>
+<script setup>
+defineProps({
+  color: {
+    type: String,
+    default: "white",
+    validator: (propsValue) => ["white", "orange"].includes(propsValue),
+  },
+});
+</script>
 
 <style>
 .logo {

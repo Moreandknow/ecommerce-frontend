@@ -1,19 +1,55 @@
 <template>
-  <div class="searchbar">
+  <div
+    :class="[
+      'searchbar',
+      {
+        'no-padded': !padded,
+      },
+    ]"
+  >
     <input placeholder="CEK: Flash Sale Rp17 Lokal!" />
-    <UButton icon="i-heroicons:magnifying-glass" class="px-5" />
+    <UButton
+      icon="i-heroicons:magnifying-glass"
+      class="px-6"
+      v-bind="attribute"
+    />
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+const props = defineProps({
+  padded: {
+    type: Boolean,
+    default: true,
+  },
+});
+
+const attribute = computed(() => {
+  if (!props.padded) {
+    return {
+      ui: {
+        rounded: "rounded-none",
+      },
+    };
+  }
+  return {};
+});
+</script>
 
 <style scoped>
 .searchbar {
   @apply bg-white;
-  @apply p-1;
   @apply flex items-center;
   @apply rounded-sm;
   @apply text-black;
+}
+
+.searchbar:not(.no-padded) {
+  @apply p-1;
+}
+
+.searchbar.no-padded {
+  @apply border-2 border-primary;
 }
 
 .searchbar input {

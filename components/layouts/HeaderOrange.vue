@@ -1,30 +1,11 @@
 <template>
   <header class="header-orange">
-    <div class="header-top">
-      <UContainer class="header-top-container">
-        <UButton
-          variant="link"
-          color="white"
-          :padded="false"
-          class="header-top-containter-text"
-        >
-          Daftar
-        </UButton>
-        <UButton
-          variant="link"
-          color="white"
-          :padded="false"
-          class="header-top-containter-text"
-        >
-          Login
-        </UButton>
-      </UContainer>
-    </div>
+    <LayoutsHeaderProfile v-if="defaultMeta.showProfile" />
     <div class="header-bottom">
       <UContainer class="header-bottom-containter">
-        <BaseLogo></BaseLogo>
-        <LayoutsSearchBar class="flex-1" />
-        <UButton variant="link">
+        <BaseLogo />
+        <LayoutsSearchBar v-if="defaultMeta.showSearch" class="flex-1" />
+        <UButton v-if="defaultMeta.showCart" variant="link">
           <IconCart />
         </UButton>
       </UContainer>
@@ -32,28 +13,43 @@
   </header>
 </template>
 
-<script setup></script>
+<script setup>
+const route = useRoute();
+
+// const meta = {
+//   showProfile: false,
+//   showSearch: false,
+//   showCart: false,
+// };
+
+const defaultMeta = computed(() => {
+  return {
+    showProfile:
+      route.meta?.header && "showProfile" in route.meta.header
+        ? route.meta.header.showProfile
+        : true,
+    showSearch:
+      route.meta?.header && "showSeacrh" in route.meta.header
+        ? route.meta.header.showSeacrh
+        : true,
+    showCart:
+      route.meta?.header && "showCart" in route.meta.header
+        ? route.meta.header.showCart
+        : true,
+  };
+});
+</script>
 
 <style scoped>
 .header-orange {
   @apply text-white;
   @apply flex flex-col;
-  height: 120px;
-}
-
-.header-orange .header-top {
-  @apply bg-primary;
-  @apply py-2;
-}
-
-.header-top-container {
-  @apply flex justify-end;
-  @apply divide-x divide-green-50/50;
 }
 
 .header-orange .header-bottom {
   @apply bg-gradient-to-b from-primary to-[#FF6633];
   @apply flex-1;
+  @apply py-6;
 }
 
 .header-bottom-containter {
