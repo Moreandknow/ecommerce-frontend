@@ -281,12 +281,12 @@ const jelajahiSyopo = [
 ];
 
 const country = [
-  "Singapura",
+  "Singapore",
   "Indonesia",
   "Thailand",
   "Malaysia",
   "Vietnam",
-  "Filipina",
+  "Philippines",
   "Brazil",
   "México",
   "Colombia",
