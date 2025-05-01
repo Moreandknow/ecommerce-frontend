@@ -18,6 +18,6 @@ import SearchBar from "~/components/layouts/SearchBar.vue";
 
 .main-layout {
   @apply flex-1;
-  @apply bg-slate-200;
+  @apply bg-[#F5F5F5];
 }
 </style>

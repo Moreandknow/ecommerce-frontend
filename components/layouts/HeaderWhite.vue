@@ -21,12 +21,6 @@
 
 <script setup>
 const route = useRoute();
-
-// const meta = {
-//   showProfile: false,
-//   title: "Keranjang",
-//   showSearch: false,
-// };
 </script>
 
 <style scoped>

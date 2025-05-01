@@ -1,7 +1,4 @@
 export default defineAppConfig({
-  head: {
-    link: [{ rel: "icon", type: "image/png", href: "/favicon.png" }],
-  },
   ui: {
     primary: "orange",
     gray: "muted",
@@ -10,6 +7,27 @@ export default defineAppConfig({
       padding: {
         sm: "py-3 px-5",
       },
+      variant: {
+        soft: "bg-{color}-100 border border-{color} hover:bg-{color}-50",
+      },
+      color: {
+        white: {
+          solid: "shadow-none ring-gray-200",
+        },
+      },
+    },
+  },
+  card: {
+    rounded: "rounded-none",
+    ring: "ring-0",
+  },
+  verticalNavigation: {
+    font: "font-normal",
+  },
+  accordion: {
+    item: {
+      padding: "p-0",
+      color: "text-slate-800",
     },
   },
 });
