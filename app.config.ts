@@ -16,18 +16,24 @@ export default defineAppConfig({
         },
       },
     },
-  },
-  card: {
-    rounded: "rounded-none",
-    ring: "ring-0",
-  },
-  verticalNavigation: {
-    font: "font-normal",
-  },
-  accordion: {
-    item: {
-      padding: "p-0",
-      color: "text-slate-800",
+    card: {
+      rounded: "rounded-none",
+      ring: "ring-0",
+    },
+    verticalNavigation: {
+      font: "font-normal",
+    },
+    accordion: {
+      item: {
+        padding: "p-0",
+        color: "text-slate-800",
+      },
+    },
+    input: {
+      rounded: "rounded-sm",
+    },
+    checkbox: {
+      label: "font-normal text-black/80",
     },
   },
 });

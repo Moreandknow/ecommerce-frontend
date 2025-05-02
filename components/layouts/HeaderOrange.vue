@@ -2,11 +2,11 @@
   <header class="header-orange">
     <LayoutsHeaderProfile v-if="defaultMeta.showProfile" />
     <div class="header-bottom">
-      <UContainer class="header-bottom-containter">
+      <UContainer class="header-bottom-container">
         <BaseLogo />
         <LayoutsSearchBar v-if="defaultMeta.showSearch" class="flex-1" />
         <UButton v-if="defaultMeta.showCart" variant="link">
-          <IconCart />
+          <IconCart class="ml-12 mr-20" />
         </UButton>
       </UContainer>
     </div>
@@ -52,14 +52,14 @@ const defaultMeta = computed(() => {
   @apply py-6;
 }
 
-.header-bottom-containter {
-  @apply flex justify-between items-center gap-12;
+.header-bottom-container {
+  @apply flex justify-between items-center gap-4;
   @apply h-full;
 }
 
-.header-top-containter-text {
+.header-top-container-text {
   @apply no-underline;
-  @apply px-3;
+  @apply px-2;
   @apply flex justify-end;
   @apply hover:text-white/50;
 }
