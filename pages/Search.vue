@@ -29,7 +29,15 @@
     </div>
     <div class="search-default">
       <div class="search-keyword">
+        <IconLamp />
         <p>Hasil pencarian untuk '<span>Testing keyword</span>'</p>
+      </div>
+      <div class="search-sort">
+        <div class="search-sort-control">
+          <p>Urutkan</p>
+          <UButton class="px-6">Termurah</UButton>
+          <UButton color="white" class="px-6">Termahal</UButton>
+        </div>
       </div>
     </div>
   </UContainer>
@@ -66,5 +74,25 @@
 
 .search-result {
   @apply flex-1;
+}
+
+.search-keyword {
+  @apply flex items-center gap-2;
+  @apply text-gray-600;
+}
+
+.search-keyword span {
+  @apply text-primary;
+}
+
+.search-sort {
+  @apply flex items-center gap-2 justify-between;
+  @apply px-5 py-3;
+  @apply bg-black/5;
+  @apply mt-4;
+}
+
+.search-sort-control {
+  @apply flex gap-3 items-center;
 }
 </style>

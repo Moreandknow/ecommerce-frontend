@@ -4,6 +4,7 @@ export default defineAppConfig({
     gray: "muted",
     button: {
       rounded: "rounded-sm",
+      font: "font-normal",
       padding: {
         sm: "py-3 px-5",
       },
