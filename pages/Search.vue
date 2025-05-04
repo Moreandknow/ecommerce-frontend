@@ -69,7 +69,6 @@
       <div class="flex justify-center mt-8">
         <UPagination
           v-model="page"
-          class="no-underline"
           :page-count="5"
           :total="items.length"
           :inactive-button="{

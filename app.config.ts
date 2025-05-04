@@ -9,7 +9,7 @@ export default defineAppConfig({
         sm: "py-3 px-5",
       },
       variant: {
-        soft: "bg-{color}-100 border border-{color} hover:bg-{color}-50",
+        soft: "bg-{color}-100 border border-{color}-500 hover:bg-{color}-50",
       },
       color: {
         white: {
@@ -35,6 +35,9 @@ export default defineAppConfig({
     },
     checkbox: {
       label: "font-normal text-black/80",
+    },
+    badge: {
+      rounded: "rounded-sm",
     },
   },
 });
