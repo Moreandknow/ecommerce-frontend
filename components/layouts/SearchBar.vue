@@ -7,7 +7,7 @@
       },
     ]"
   >
-    <input placeholder="CEK: Flash Sale Rp17 Lokal!" />
+    <input placeholder="CEK: Flash Sale Rp17 Lokal!" class="searchbar-input" />
     <UButton
       icon="i-heroicons:magnifying-glass"
       class="px-6"
@@ -53,7 +53,8 @@ const attribute = computed(() => {
 }
 
 .searchbar input {
-  @apply outline-none pl-4;
+  @apply outline-none pl-3;
   @apply flex-1;
+  @apply min-w-0;
 }
 </style>

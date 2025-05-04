@@ -8,7 +8,7 @@
         <div class="product-price">
           <p><span>Rp</span>{{ formattedPrice }}</p>
         </div>
-        <div v-if="(sale = undefined)" class="product-sale">
+        <div v-if="sale !== undefined" class="product-sale">
           <p>{{ formattedSale }} Terjual</p>
         </div>
       </div>
@@ -49,6 +49,8 @@ const formattedDiscount = computed(() => formatNumber(props.discount));
   @apply bg-white;
   @apply border;
   @apply relative;
+
+  @apply hover:border-primary;
 }
 
 .product-discount {

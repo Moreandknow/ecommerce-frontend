@@ -6,7 +6,7 @@
         <BaseLogo />
         <LayoutsSearchBar v-if="defaultMeta.showSearch" class="flex-1" />
         <UButton v-if="defaultMeta.showCart" variant="link">
-          <IconCart class="ml-12 mr-20" />
+          <IconCart />
         </UButton>
       </UContainer>
     </div>
@@ -29,8 +29,8 @@ const defaultMeta = computed(() => {
         ? route.meta.header.showProfile
         : true,
     showSearch:
-      route.meta?.header && "showSeacrh" in route.meta.header
-        ? route.meta.header.showSeacrh
+      route.meta?.header && "showSearch" in route.meta.header
+        ? route.meta.header.showSearch
         : true,
     showCart:
       route.meta?.header && "showCart" in route.meta.header
@@ -53,14 +53,7 @@ const defaultMeta = computed(() => {
 }
 
 .header-bottom-container {
-  @apply flex justify-between items-center gap-4;
+  @apply flex justify-between items-center gap-12;
   @apply h-full;
-}
-
-.header-top-container-text {
-  @apply no-underline;
-  @apply px-2;
-  @apply flex justify-end;
-  @apply hover:text-white/50;
 }
 </style>

@@ -8,7 +8,7 @@
     [x]     Slicing Layout Dashboard - Sidebar
 
     [x]     Slicing Homepage
-    []     Slicing Search Page
+    [x]     Slicing Search Page
     []     Slicing Product Detail
     []     Slicing Cart
     []     Slicing Checkout

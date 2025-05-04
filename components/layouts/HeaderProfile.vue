@@ -5,7 +5,7 @@
         variant="link"
         color="white"
         :padded="false"
-        class="header-profile-containter-text"
+        class="header-profile-container-button"
       >
         Daftar
       </UButton>
@@ -13,7 +13,7 @@
         variant="link"
         color="white"
         :padded="false"
-        class="header-profile-containter-text"
+        class="header-profile-container-button"
       >
         Login
       </UButton>
@@ -32,13 +32,12 @@
 
 .header-profile-container {
   @apply flex justify-end;
-  @apply divide-x divide-green-50/50;
+  @apply divide-x divide-gray-50/50;
 }
 
-.header-profile-containter-text {
-  @apply no-underline;
+.header-profile-container-button {
   @apply px-3;
-  @apply flex justify-end;
+  @apply no-underline;
   @apply hover:text-white/50;
 }
 </style>
