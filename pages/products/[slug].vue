@@ -63,15 +63,22 @@
             <p class="w-28 text-black/55 text-sm">Kuantitas</p>
             <BaseInputQuantity v-model="quantity" />
           </div>
-          <UButton class="mt-6" variant="soft">
-            <IconCartPlus />
-            Masukkan Keranjang
-          </UButton>
+          <div class="flex gap-4">
+            <div>
+              <UButton class="mt-6" variant="soft">
+                <IconCartPlus />
+                Masukkan Keranjang
+              </UButton>
+            </div>
+            <UButton class="mt-6 px-14" variant="solid">
+              Beli Langsung
+            </UButton>
+          </div>
           <hr class="my-5" />
           <div class="flex gap-5">
             <div class="flex gap-2">
               <img src="~/assets/images/garansi.png" />
-              <p class="text-black/80 text-sm">Garansi Syopo</p>
+              <p class="text-black/80 text-sm">Garansi MoreAndShop</p>
             </div>
             <p class="text-black/55 text-sm">
               Dapatkan barang pesananmu atau uang kembali.
@@ -81,14 +88,193 @@
       </div>
     </UCard>
     <UCard>
-      <div class="product-seller"></div>
+      <div class="product-seller">
+        <div class="flex gap-6 items-center w-96">
+          <UAvatar :alt="dataDummy.seller.store_name" size="3xl" />
+          <div>
+            <h3>{{ dataDummy.seller.store_name }}</h3>
+            <UButton
+              color="white"
+              size="xs"
+              class="mt-2"
+              :to="`/shop/${dataDummy.seller.username}`"
+              ><IconShop />Kunjungi Toko</UButton
+            >
+          </div>
+        </div>
+        <div class="w-[1px] bg-slate-200" />
+        <div class="grid grid-cols-2 items-center flex-1">
+          <div class="flex gap-2 text-sm">
+            <p class="text-black/40 w-36">Penilaian</p>
+            <p class="text-primary">{{ dataDummy.seller.rating_count }}</p>
+          </div>
+          <div class="flex gap-2 text-sm">
+            <p class="text-black/40 w-36">Bergabung</p>
+            <p class="text-primary">{{ dataDummy.seller.join_date }}</p>
+          </div>
+          <div class="flex gap-2 text-sm">
+            <p class="text-black/40 w-36">Bergabung</p>
+            <p class="text-primary">{{ dataDummy.seller.product_count }}</p>
+          </div>
+        </div>
+      </div>
     </UCard>
+    <UCard>
+      <div class="product-detail">
+        <div class="product-title-section">
+          <h3 class="text-lg">Spesifikasi Produk</h3>
+        </div>
+        <div class="flex flex-col gap-4">
+          <div class="product-detail-item">
+            <p>Kategori</p>
+            <div>
+              <UBreadcrumb
+                :links="[
+                  {
+                    label: dataDummy.category.parent.name,
+                    to: '/',
+                  },
+                  {
+                    label: dataDummy.category.name,
+                    to: '/categories/${dataDummy.category.parent.slug}/${dataDummy.category.slug}',
+                  },
+                ]"
+                :ui="{
+                  ...uiBreadcrumb,
+                  active: 'text-[#0055AA]',
+                }"
+              />
+            </div>
+          </div>
+          <div class="product-detail-item">
+            <p>Stok</p>
+            <div class="text-sm font-normal">{{ dataDummy.stock }}</div>
+          </div>
+          <div class="product-detail-item">
+            <p>Dikirim Dari</p>
+            <div class="text-sm font-normal uppercase">
+              {{ dataDummy.seller.send_from.city.name }}
+            </div>
+          </div>
+        </div>
+        <div class="product-title-section">
+          <h3 class="text-lg">Deskripsi Produk</h3>
+        </div>
+        <div
+          class="text-sm text-black/80 whitespace-pre-line"
+          v-text="dataDummy.description"
+        />
+      </div>
+    </UCard>
+    <UCard>
+      <h3 class="text-lg font-normal text-black/85">Penilaian Produk</h3>
+      <div
+        class="mt-3 border border-primary-100/80 bg-primary-50/30 rounded-sm p-8 flex gap-8 items-center"
+      >
+        <div class="flex flex-col items-center">
+          <p class="text-primary text-lg">
+            <span class="text-3xl">{{ dataDummy.rating }}</span> dari 5
+          </p>
+          <BaseRating
+            :model-value="dataDummy.rating"
+            disabled
+            size="lg"
+            class="mt-2"
+          />
+        </div>
+        <div class="flex flex-wrap gap-2 items-center">
+          <UButton
+            variant="outline"
+            size="xs"
+            class="min-w-24 text-sm justify-center"
+            >Semua</UButton
+          >
+          <div class="flex flex-row-reverse gap-2">
+            <UButton
+              v-for="(i, index) in 5"
+              :key="`rating-${i}`"
+              color="white"
+              size="xs"
+              class="min-w-24 text-sm justify-center"
+            >
+              {{ i }} Bintang ({{ dataDummy.review_summary[index] || 0 }})
+            </UButton>
+          </div>
+          <UButton
+            color="white"
+            size="xs"
+            class="min-w-24 text-sm justify-center"
+            >Dengan Komentar ({{
+              dataDummy.review_summary.with_description
+            }})</UButton
+          >
+          <UButton
+            color="white"
+            size="xs"
+            class="min-w-24 text-sm justify-center"
+            >Dengan Media ({{
+              dataDummy.review_summary.with_attachment
+            }})</UButton
+          >
+        </div>
+      </div>
+      <div class="flex flex-col mt-1 divide-y">
+        <div v-for="i in 5" :key="`review-${i}`" class="flex gap-3 py-4">
+          <UAvatar alt="Moreno Adryan" size="lg" />
+          <div class="flex-1">
+            <p>Moreno Adryan</p>
+            <BaseRating :model-value="4" disabled class="mt-1" />
+            <div class="flex gap-1 mt-0.5 text-black/55 text-xs">
+              <p>2025-5-7 8:28</p>
+              |
+              <p>Variasi: Vermont Camel, L</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-end pt-5">
+        <BasePagination v-model="page" :total="reviews.length" />
+      </div>
+    </UCard>
+    <div class="flex flex-col gap-4 mt-2">
+      <div class="flex justify-between gap-2 items-center">
+        <h4 class="uppercase text-black/55 font-medium">
+          Produk lain dari toko ini
+        </h4>
+        <UButton
+          variant="link"
+          class="font-thin no-underline"
+          :padded="false"
+          :to="`/shop/${dataDummy.seller.username}`"
+        >
+          Lihat Semua <UIcon name="i-heroicons:chevron-right"
+        /></UButton>
+      </div>
+      <div class="grid grid-cols-6 gap-3">
+        <BaseProductCard
+          v-for="product in dataDummy.other_product"
+          :key="`product - ${product.uuid}`"
+          :title="product.name"
+          :price="product.price"
+          :image="product.image_url"
+          :slug="product.slug"
+          :sale="product.sale_count"
+          :discount="product.price_discount_percentage"
+        />
+      </div>
+    </div>
   </UContainer>
 </template>
 
 <script setup>
+import productImg from "@/assets/images/homepage/productimage.png";
+const productCard = {
+  image: productImg,
+  price: 590000,
+};
+
 const page = ref(1);
-const review = ref(Array(55));
+const reviews = ref(Array(55));
 
 const quantity = ref(1);
 const dataDummy = computed(() => {
@@ -114,7 +300,7 @@ const dataDummy = computed(() => {
       },
     },
     description:
-      "Deskripsi produk 1. Lorem ipsum dolor sit amet consectetur, adipisicing elit",
+      "Deskripsi produk 1. Lorem ipsum dolor sit amet \n consectetur, adipisicing elit",
     weight: 100,
     length: 72,
     width: 21,
@@ -127,7 +313,26 @@ const dataDummy = computed(() => {
       product_count: 98,
       rating_count: 196,
       join_date: "6 months ago",
-      send_from: null,
+      send_from: {
+        uuid: "77d09151-2a65-11f0-b6b7-04d4c4eb28eb",
+        is_default: true,
+        receiver_name: "Morenowww",
+        receiver_phone: "08124",
+        city: {
+          uuid: "ee8eb26c-78fe-11ef-bd77-9e4478916c69",
+          province: {
+            uuid: "ee8d857c-78fe-11ef-bd77-9e4478916c69",
+            name: "Bali",
+          },
+          external_id: 128,
+          name: "Kabupaten Gianyar",
+        },
+        district: "Tambun",
+        postal_code: "12540",
+        detail_address: "JL. ABC 123",
+        address_note: "Belakang jurang",
+        type: "home",
+      },
     },
     images: [
       "http://localhost:8000/storage/attachment1.jpg",
@@ -136,8 +341,14 @@ const dataDummy = computed(() => {
       "http://localhost:8000/storage/attachment4.jpg",
     ],
     variations: [
-      { name: "Warna", values: ["Hitam", "Kuning", "Biru"] },
-      { name: "Ukuran", values: ["M", "L", "XL"] },
+      {
+        name: "Warna",
+        values: ["Hitam", "Kuning", "Biru"],
+      },
+      {
+        name: "Ukuran",
+        values: ["M", "L", "XL"],
+      },
     ],
     review_summary: {
       5: 0,
@@ -268,7 +479,7 @@ const items = [
 
 <style scoped>
 .product-briefing {
-  @apply flex gap-8;
+  @apply flex gap-12;
 }
 
 .product-information {
@@ -304,8 +515,33 @@ span.product-summary-item-description {
 
 .product-price {
   @apply flex gap-4 items-center;
-  @apply my-3;
-  @apply bg-gray-50;
+  @apply my-4;
+  @apply bg-white;
   @apply p-4;
+}
+
+.product-seller {
+  @apply flex gap-6 items-stretch;
+}
+
+.product-title-section {
+  @apply bg-white;
+  @apply p-3;
+}
+
+.product-title-section h3 {
+  @apply text-lg font-normal text-black/85;
+}
+
+.product-detail {
+  @apply flex flex-col gap-6;
+}
+
+.product-detail-item {
+  @apply flex gap-2;
+}
+
+.product-detail-item > p {
+  @apply text-black/40 text-sm w-40;
 }
 </style>

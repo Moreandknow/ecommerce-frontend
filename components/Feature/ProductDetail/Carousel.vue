@@ -40,14 +40,16 @@
       <template #default="{ item, index }">
         <img
           :src="item"
-          class="max-w-[82px] aspect-[1/1] m-1 object-cover"
+          class="max-w-[82px] aspect-[1/1] m-1 object-cover transition-all duration-200 cursor-pointer"
           :class="[
             carouselElement?.page === index + 1
               ? 'ring-2 ring-primary'
               : 'ring-0',
+            'hover:ring-2 hover:ring-primary',
           ]"
           role="button"
           @click="carouselElement?.select(index + 1)"
+          @mouseover="carouselElement?.select(index + 1)"
         />
       </template>
     </UCarousel>
