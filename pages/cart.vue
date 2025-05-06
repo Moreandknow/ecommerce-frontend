@@ -43,6 +43,77 @@
         </div>
       </div>
     </UCard>
+    <UCard
+      :ui="{
+        header: {
+          padding: paddingCheckoutFooter,
+        },
+        body: {
+          padding: paddingCheckoutFooter,
+        },
+        footer: {
+          padding: paddingCheckoutFooter,
+        },
+        divide: 'divide-dashed',
+      }"
+    >
+      <template #header>
+        <div class="flex justify-end gap-40">
+          <div class="flex gap-1 items-center font-medium">
+            <IconVoucher />
+            Voucher MoreAndShop
+          </div>
+          <UButton variant="link" color="blue" @click="openVoucher = true">
+            Gunakan/Masukan kode
+          </UButton>
+        </div>
+      </template>
+      <template #default>
+        <div class="flex justify-end">
+          <div class="flex items-center gap-5">
+            <UCheckbox>
+              <template #label>
+                <div class="flex gap-2">
+                  <IconCoin />
+                  <span class="font-medium">Koin MoreAndShop</span>
+                </div>
+              </template>
+            </UCheckbox>
+            <span class="font-medium text-sm text-gray-500">
+              Saldo koin tidak cukup</span
+            >
+            <div class="flex justify-end flex-1 min-w-48">
+              <span class="text-gray-300">-Rp0</span>
+            </div>
+          </div>
+        </div>
+      </template>
+      <template #footer>
+        <div class="flex justify-end items-center">
+          <div class="flex gap-4">
+            <div>
+              <div class="flex items-center gap-1">
+                <span>Total ({{ 1 }} produk)</span>
+                <span class="text-primary font-normal text-2xl">
+                  Rp{{ formatNumber(145000) }}
+                </span>
+              </div>
+              <div class="flex gap-6 text-sm font-normal justify-end">
+                <span>Hemat</span>
+                <span class="text-primary">104RB</span>
+              </div>
+            </div>
+            <UButton
+              class="px-9 min-w-52 justify-center"
+              @click="handleCheckout"
+              >Checkout</UButton
+            >
+          </div>
+        </div>
+      </template>
+    </UCard>
+
+    <ModalVoucher v-model="openVoucher" />
   </UContainer>
 </template>
 
@@ -55,6 +126,17 @@ definePageMeta({
     title: "Keranjang Belanja",
   },
 });
+
+const openVoucher = ref(false);
+
+const paddingCheckoutFooter = "sm:py-3 sm:px-7";
+
+const router = useRouter();
+
+function handleCheckout() {
+  //Hit API
+  router.push("/checkout");
+}
 </script>
 
 <style scoped>

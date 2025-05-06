@@ -10,6 +10,6 @@
     [x]     Slicing Homepage
     [x]     Slicing Search Page
     [x]     Slicing Product Detail
-    []     Slicing Cart
+    [x]     Slicing Cart
     []     Slicing Checkout
     []     Slicing Halaman Pembayaran

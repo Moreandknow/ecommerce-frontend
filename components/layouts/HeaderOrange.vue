@@ -5,7 +5,7 @@
       <UContainer class="header-bottom-container">
         <BaseLogo />
         <LayoutsSearchBar v-if="defaultMeta.showSearch" class="flex-1" />
-        <UButton v-if="defaultMeta.showCart" variant="link">
+        <UButton v-if="defaultMeta.showCart" variant="link" to="/cart">
           <IconCart />
         </UButton>
       </UContainer>
