@@ -9,7 +9,7 @@
 
     [x]     Slicing Homepage
     [x]     Slicing Search Page
-    []     Slicing Product Detail
+    [x]     Slicing Product Detail
     []     Slicing Cart
     []     Slicing Checkout
     []     Slicing Halaman Pembayaran
