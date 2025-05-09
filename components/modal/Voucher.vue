@@ -51,7 +51,7 @@
                 <span class="mt-2 text-black/55 text-xs">
                   Berakhir dlm: 1 hari
                 </span>
-                <span class="text-primary text-sm mt-1">Azizah store</span>
+                <span class="text-primary text-sm mt-1">Moreno store</span>
               </div>
               <URadio v-model="temporaryVoucher" :value="`voucher-${i}`" />
             </div>

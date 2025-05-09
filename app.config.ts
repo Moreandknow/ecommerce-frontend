@@ -35,6 +35,8 @@ export default defineAppConfig({
     },
     checkbox: {
       label: "font-normal text-black/80",
+      base: "disabled:bg-gray-100",
+      rounded: "rounded-sm",
     },
     badge: {
       rounded: "rounded-sm",

@@ -11,5 +11,5 @@
     [x]     Slicing Search Page
     [x]     Slicing Product Detail
     [x]     Slicing Cart
-    []     Slicing Checkout
+    [x]     Slicing Checkout
     []     Slicing Halaman Pembayaran

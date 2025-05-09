@@ -56,14 +56,14 @@
                 Variasi: Privacy matte, iphone XS MAX
               </p>
             </div>
-            <div class="w-[16%] text-sm font-normal text-right text-black/55">
+            <div class="w-[16%] text-sm font-normal text-right text-black/80">
               Rp{{ formatNumber(1000) }}
             </div>
-            <div class="w-[16%] text-sm font-normal text-right text-black/55">
+            <div class="w-[16%] text-sm font-normal text-right text-black/80">
               {{ formatNumber(10) }}
             </div>
-            <div class="w-[16%] text-sm font-normal text-right text-black/55">
-              {{ formatNumber(10000000) }}
+            <div class="w-[16%] text-sm font-medium text-right text-black/80">
+              Rp{{ formatNumber(10000000) }}
             </div>
           </div>
         </div>
@@ -125,8 +125,105 @@
         >
       </div>
     </div>
+    <UCard>
+      <template #header>
+        <div class="flex justify-between gap-2">
+          <div class="flex gap-1 items-center font-normal text-lg">
+            <IconVoucher /> Voucher MoreAndShop
+          </div>
+          <UButton
+            :padded="false"
+            variant="link"
+            color="blue"
+            @click="openVoucher = true"
+            >Pilih Voucher</UButton
+          >
+        </div>
+      </template>
+      <template #default>
+        <div class="flex gap-7 items-center">
+          <div class="flex gap-1 items-center font-normal text-lg">
+            <IconCoin /> Koin MoreAndShop
+          </div>
+          <p class="font-medium text-sm text-gray-400">
+            Koin tidak dapat ditukarkan
+          </p>
+          <div class="flex-1 flex justify-end items-center gap-2">
+            <span class="text-gray-400">[-Rp0]</span>
+            <UCheckbox disabled />
+          </div>
+        </div>
+      </template>
+    </UCard>
+
+    <div class="bg-white">
+      <div class="p-6 flex gap-14">
+        <span>Pilih Pembayaran</span>
+        <URadioGroup
+          v-model="paymentSelected"
+          :options="paymentList"
+          :ui-radio="{
+            wrapper: 'items-center py-2',
+          }"
+        >
+          <template #label="{ option }">
+            <div class="flex gap-4 items-center">
+              <div
+                class="w-12 h-12 border rounded-sm p-2 flex justify-center items-center"
+              >
+                <img :src="option.image" />
+              </div>
+              <p class="font-normal text-sm">{{ option.label }}</p>
+            </div>
+          </template>
+        </URadioGroup>
+      </div>
+      <div
+        class="border-t border-gray-100 p-6 flex justify-end bg-yellow-50/20"
+      >
+        <table class="price-summary">
+          <tbody>
+            <tr>
+              <td>
+                <span class="text-sm text-black/55">SubTotal untuk produk</span>
+              </td>
+              <td class="text-right min-w-44">Rp{{ formatNumber(100000) }}</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="text-sm text-black/55">Total Ongkos Kirim</span>
+              </td>
+              <td class="text-right min-w-44">Rp{{ formatNumber(23000) }}</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="text-sm text-black/55">Biaya Layanan</span>
+              </td>
+              <td class="text-right min-w-44">Rp{{ formatNumber(2500) }}</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="text-sm text-black/55">Total Pembayaran</span>
+              </td>
+              <td class="text-right min-w-44 text-3xl text-primary">
+                Rp{{ formatNumber(125500) }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="border-t border-gray-100 border-dashed p-6 flex justify-end bg-yellow-50/30"
+      >
+        <UButton class="w-52 justify-center" @click="handlePayment"
+          >Buat Pesanan</UButton
+        >
+      </div>
+    </div>
+
     <ModalAddress v-model:open="openAddress" />
     <ModalCourier v-model:open="openCourier" />
+    <ModalVoucher v-model="openVoucher" />
   </UContainer>
 </template>
 
@@ -139,8 +236,52 @@ definePageMeta({
   },
 });
 
+const router = useRouter();
+
+const paymentSelected = ref("bca-va");
+const paymentList = computed(() => [
+  {
+    value: "bni_va",
+    label: "Bank BNI",
+    image: "/images/logo-bni.webp",
+  },
+  {
+    value: "qris",
+    label: "QRIS",
+    image: "/images/qris.png",
+  },
+  {
+    value: "bca_va",
+    label: "Bank BCA",
+    image: "/images/logo-bca.png",
+  },
+  {
+    value: "gopay",
+    label: "GoPay",
+    image: "/images/logo-gopay.png",
+  },
+]);
+
 const openAddress = ref(false);
 const openCourier = ref(false);
+const openVoucher = ref(false);
+
+function handlePayment() {
+  // TODO: Hit API
+  router.push("/checkout/payment");
+}
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+.price-summary tr:not(:first-child) td {
+  @apply py-3;
+}
+
+.price-summary tr:first-child td {
+  @apply pb-3;
+}
+
+.price-summary tr:last-child td {
+  @apply pb-0 pt-3;
+}
+</style>
