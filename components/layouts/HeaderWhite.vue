@@ -33,6 +33,6 @@ const route = useRoute();
 <style scoped>
 .header-bottom-container {
   @apply flex justify-between items-center gap-10;
-  @apply py-7;
+  @apply py-4;
 }
 </style>

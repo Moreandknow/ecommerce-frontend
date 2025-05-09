@@ -1,6 +1,7 @@
 <template>
   <UButton variant="link" :color="color" :padded="false" to="/" class="logo">
-    MoreAndShop
+    More <br />And <br />
+    Shop
   </UButton>
 </template>
 
@@ -18,5 +19,7 @@ defineProps({
 .logo {
   @apply !text-2xl !font-normal;
   @apply !no-underline;
+  @apply !leading-[0.8];
+  @apply text-center;
 }
 </style>

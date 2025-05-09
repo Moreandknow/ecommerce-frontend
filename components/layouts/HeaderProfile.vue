@@ -6,6 +6,7 @@
         color="white"
         :padded="false"
         class="header-profile-container-button"
+        to="/daftar"
       >
         Daftar
       </UButton>
@@ -14,6 +15,7 @@
         color="white"
         :padded="false"
         class="header-profile-container-button"
+        to="/login"
       >
         Login
       </UButton>

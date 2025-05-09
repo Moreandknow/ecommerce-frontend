@@ -13,3 +13,7 @@
     [x]     Slicing Cart
     [x]     Slicing Checkout
     [x]     Slicing Halaman Pembayaran
+
+    [x]      Slicing Login
+    []
+    []
