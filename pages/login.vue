@@ -18,10 +18,14 @@
           <h2>Log in</h2>
           <form class="mt-7 space-y-7">
             <UFormGroup>
-              <UInput placeholder="No. Handphone/Email" size="lg" />
+              <UInput
+                placeholder="No. Handphone/Email"
+                type="email"
+                size="lg"
+              />
             </UFormGroup>
             <UFormGroup>
-              <UInput placeholder="Password" size="lg" />
+              <UInput placeholder="Password" type="password" size="lg" />
             </UFormGroup>
             <div>
               <UButton block>LOG IN</UButton>

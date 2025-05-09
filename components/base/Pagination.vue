@@ -5,7 +5,7 @@
     :total="total"
     :inactive-button="{
       variant: 'link',
-      class: 'text-black/40 hover:text-primary px-3.5 py-0.5',
+      class: 'text-black/40 hover:text-primary px-3.5 py-0.5 !no-underline',
     }"
     :active-button="{
       class: 'px-3.5 py-0.5 rounded-sm',

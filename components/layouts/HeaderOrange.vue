@@ -3,7 +3,9 @@
     <LayoutsHeaderProfile v-if="defaultMeta.showProfile" />
     <div class="header-bottom">
       <UContainer class="header-bottom-container">
-        <BaseLogo />
+        <div class="ml-[45px] px-7">
+          <BaseLogo />
+        </div>
         <LayoutsSearchBar v-if="defaultMeta.showSearch" class="flex-1" />
         <UButton v-if="defaultMeta.showCart" variant="link" to="/Cart">
           <IconCart />
