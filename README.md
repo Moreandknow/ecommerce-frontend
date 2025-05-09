@@ -12,4 +12,4 @@
     [x]     Slicing Product Detail
     [x]     Slicing Cart
     [x]     Slicing Checkout
-    []     Slicing Halaman Pembayaran
+    [x]     Slicing Halaman Pembayaran
