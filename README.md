@@ -14,7 +14,9 @@
     [x]     Slicing Checkout
     [x]     Slicing Halaman Pembayaran
 
-    [x]      Slicing Login
-    [x]      Slicing Forgot Password
-    [x]      Slicing Sign Up
-    [x]      Slicing Sidebar My Account
+    [x]     Slicing Login
+    [x]     Slicing Forgot Password
+    [x]     Slicing Sign Up
+
+    [x]     Slicing Sidebar My Account
+    [x]     Slicing Sidebar My Account - Profile
