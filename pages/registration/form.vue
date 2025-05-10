@@ -3,6 +3,7 @@
     <UContainer class="py-14">
       <div class="max-w-[500px] mx-auto">
         <div class="step-header">
+          <!-- eslint-disable-next-line vue/no-v-for-template-key -->
           <template v-for="(step, index) in registrationStep" :key="step.key">
             <div class="step-item" :class="[index <= stepActive && 'is-done']">
               <div class="step-item-icon">
