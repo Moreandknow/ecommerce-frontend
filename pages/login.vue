@@ -25,11 +25,17 @@
               />
             </UFormGroup>
             <UFormGroup>
-              <UInput placeholder="Password" type="password" size="lg" />
+              <BaseInputPassword placeholder="Password" size="lg" />
             </UFormGroup>
             <div>
               <UButton block>LOG IN</UButton>
-              <UButton variant="link" color="blue" :padded="false" class="mt-2">
+              <UButton
+                variant="link"
+                color="blue"
+                :padded="false"
+                class="mt-2"
+                to="/forgot-password"
+              >
                 Lupa Password
               </UButton>
             </div>

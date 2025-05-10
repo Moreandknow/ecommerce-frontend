@@ -15,5 +15,5 @@
     [x]     Slicing Halaman Pembayaran
 
     [x]      Slicing Login
-    []
+    [x]      Slicing Forgot Password
     []
