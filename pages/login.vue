@@ -4,8 +4,10 @@
       <div class="flex justify-center items-center">
         <div class="flex flex-col gap-14 text-white text-center">
           <h1 class="text-8xl leading-[0.8]">More<br />And <br />Shop</h1>
-          Tempat Belanja Online No. 1 <br />
-          di Cipedak dan Jagakarsa
+          <p>
+            Tempat Belanja Online No. 1 <br />
+            di Cipedak dan Jagakarsa
+          </p>
         </div>
       </div>
       <div>

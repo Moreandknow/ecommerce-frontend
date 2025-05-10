@@ -16,4 +16,4 @@
 
     [x]      Slicing Login
     [x]      Slicing Forgot Password
-    []
+    [x]      Slicing Sign Up

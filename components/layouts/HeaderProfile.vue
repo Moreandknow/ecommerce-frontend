@@ -6,7 +6,7 @@
         color="white"
         :padded="false"
         class="header-profile-container-button"
-        to="/daftar"
+        to="/registration"
       >
         Daftar
       </UButton>
