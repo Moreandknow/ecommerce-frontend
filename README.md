@@ -22,3 +22,4 @@
     [x]     Slicing Sidebar My Account - Profile
     [x]     Slicing Sidebar My Account - Change Email
     [x]     Slicing Sidebar My Account - Change Phone
+    [x]     Slicing Sidebar My Account - Address List
