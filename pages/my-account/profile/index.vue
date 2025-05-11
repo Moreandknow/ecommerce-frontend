@@ -40,7 +40,7 @@
               class="underline"
               label="Ubah"
               :padded="false"
-              to="/my-account/profile/change-email"
+              to="/my-account/profile/change-phone"
             />
           </div>
         </div>
