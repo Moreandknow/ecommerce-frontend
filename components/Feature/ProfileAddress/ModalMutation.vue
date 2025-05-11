@@ -14,7 +14,7 @@
           <UInput placeholder="Nomor Telepon" size="lg" />
         </UFormGroup>
         <UFormGroup class="col-span-2">
-          <UInput placeholder="Provinsi, Kota" size="lg" />
+          <FeatureProfileAddressInputSelectCity />
         </UFormGroup>
         <UFormGroup>
           <UInput placeholder="Kecamatan" size="lg" />
