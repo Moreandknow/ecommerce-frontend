@@ -2,7 +2,9 @@
   <div>
     <div class="flex justify-between gap-4 items-center">
       <h3 class="text-lg font-medium">Alamat Saya</h3>
-      <UButton icon="i-heroicons:plus">Tambah Alamat Baru</UButton>
+      <UButton icon="i-heroicons:plus" @click="openEditor = true"
+        >Tambah Alamat Baru</UButton
+      >
     </div>
     <hr class="mt-5 mb-3 border-gray-200/60" />
     <h4 class="text-lg font-normal">Alamat</h4>
@@ -11,12 +13,16 @@
         v-for="address in addressList"
         :key="address.uuid"
         :item="address"
+        @change="handleChange"
       />
     </div>
+
+    <FeatureProfileAddressModalMutation v-model:open="openEditor" />
   </div>
 </template>
 
 <script setup>
+const openEditor = ref(false);
 const addressList = [
   {
     uuid: "77d09151-2a65-11f0-b6b7-04d4c4eb28eb",
@@ -59,6 +65,10 @@ const addressList = [
     type: "home",
   },
 ];
+
+function handleChange() {
+  openEditor.value = true;
+}
 </script>
 
 <style lang="scss" scoped></style>

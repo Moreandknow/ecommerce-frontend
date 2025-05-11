@@ -33,6 +33,9 @@ export default defineAppConfig({
     input: {
       rounded: "rounded-sm",
     },
+    textarea: {
+      rounded: "rounded-sm",
+    },
     radio: {
       label: "font-normal",
     },
