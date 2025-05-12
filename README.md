@@ -26,3 +26,4 @@
     [x]     Slicing Address - Add Address
     [x]     Slicing Address - Add Address - Custom Select
     [x]     Slicing Sidebar My Account - Change Password
+    [x]     Slicing My Order

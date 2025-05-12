@@ -9,9 +9,9 @@
       <LayoutsSidebar :items="links" class="my-account-sidebar" />
     </div>
     <div class="flex-1">
-      <UCard>
+      <component :is="wrapper">
         <NuxtPage />
-      </UCard>
+      </component>
     </div>
   </UContainer>
 </template>
