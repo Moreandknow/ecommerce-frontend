@@ -28,3 +28,4 @@
     [x]     Slicing Sidebar My Account - Change Password
     [x]     Slicing My Order List
     [x]     Slicing My Order List - Pop Up Review
+    [x]     Slicing My Order List - Order Detail
