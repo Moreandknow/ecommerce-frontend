@@ -1,16 +1,3 @@
 <template>
-  <div>Product</div>
+  <NuxtPage />
 </template>
-
-<script setup>
-definePageMeta({
-  layout: "seller",
-  breadcrumb: [
-    {
-      label: "Voucher",
-    },
-  ],
-});
-</script>
-
-<style lang="scss" scoped></style>

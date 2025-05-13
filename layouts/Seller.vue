@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-const sidebarItems = [
+const sidebarItems = computed(() => [
   {
     label: "Pesanan",
     icon: "i-heroicons:clipboard-document-list",
@@ -24,6 +24,7 @@ const sidebarItems = [
       {
         label: "Produk Saya",
         to: "/seller/product",
+        exact: true,
       },
       {
         label: "Tambah Produk Baru",
@@ -46,7 +47,7 @@ const sidebarItems = [
       },
     ],
   },
-];
+]);
 </script>
 
 <style scoped>
@@ -60,6 +61,7 @@ const sidebarItems = [
 .main-content {
   @apply flex-1;
   @apply bg-black/10;
+  @apply pt-[calc(56px+16px)] pb-4 pl-[calc(240px+32px)] pr-8;
 }
 
 .seller-sidebar {

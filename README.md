@@ -29,4 +29,6 @@
     [x]     Slicing My Order List
     [x]     Slicing My Order List - Pop Up Review
     [x]     Slicing My Order List - Order Detail
+
     [x]     Slicing Shop Detail
+    [x]     Slicing Seller - Product - List
