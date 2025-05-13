@@ -26,7 +26,7 @@
             </div>
           </div>
         </SellerFormGroup>
-        <SellerFormGroup label="Nama Produk">
+        <SellerFormGroup label="Nama Produk" required>
           <UInput size="lg" />
         </SellerFormGroup>
         <SellerFormGroup label="Kategori" required>
@@ -64,25 +64,33 @@
     </SellerCard>
     <SellerCard class="Pengiriman">
       <div class="mt-4 space-y-6">
-        <SellerFormGroup label="Nama Produk">
+        <SellerFormGroup label="Berat" required>
           <div class="flex">
-            <UInput size="lg" type="number">
-              <template #trailing>gr</template>
+            <UInput size="lg" type="number" placeholder="Input">
+              <template #trailing>
+                <span class="text-black/50">gr</span>
+              </template>
             </UInput>
           </div>
         </SellerFormGroup>
-        <SellerFormGroup label="Kategori" required>
+        <SellerFormGroup label="Ukuran Paket" required>
           <div class="flex gap-2 items-center">
-            <UInput size="lg" type="number">
-              <template #trailing>cm</template>
+            <UInput size="lg" type="number" placeholder="L">
+              <template #trailing>
+                <span class="text-black/50">cm</span>
+              </template>
             </UInput>
             <UIcon name="i-heroicons:x-mark" class="text-black/20" />
-            <UInput size="lg" type="number">
-              <template #trailing>cm</template>
+            <UInput size="lg" type="number" placeholder="P">
+              <template #trailing>
+                <span class="text-black/50">cm</span>
+              </template>
             </UInput>
             <UIcon name="i-heroicons:x-mark" class="text-black/20" />
-            <UInput size="lg" type="number">
-              <template #trailing>cm</template>
+            <UInput size="lg" type="number" placeholder="T">
+              <template #trailing>
+                <span class="text-black/50">cm</span>
+              </template>
             </UInput>
           </div>
         </SellerFormGroup>
@@ -142,4 +150,4 @@ function handleDeleteVariants(index) {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>
