@@ -2,7 +2,11 @@
   <div class="space-y-9">
     <div class="flex justify-between items-center gap-2">
       <h3 class="font-medium text-xl">Produk Saya</h3>
-      <UButton icon="i-heroicons:plus" label="Tambah Produk Baru" />
+      <UButton
+        icon="i-heroicons:plus"
+        label="Tambah Produk Baru"
+        to="/seller/product/add"
+      />
     </div>
     <UCard>
       <div class="space-y-6">
@@ -64,6 +68,7 @@
 </template>
 
 <script setup>
+const router = useRouter();
 const columns = [
   {
     key: "name",
