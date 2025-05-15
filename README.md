@@ -33,3 +33,4 @@
     [x]     Slicing Shop Detail
     [x]     Slicing Seller - Product - List
     [x]     Slicing Seller - Product - Add/Edit Product(Delete not yet)
+    [x]     Slicing Seller - Voucher - List
