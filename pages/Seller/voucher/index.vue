@@ -1,7 +1,9 @@
 <template>
   <SellerCard title="Daftar Voucher">
     <template #header-append>
-      <UButton icon="i-heroicons:plus">Tambah Voucher</UButton>
+      <UButton icon="i-heroicons:plus" to="/seller/voucher/add"
+        >Tambah Voucher</UButton
+      >
     </template>
     <BaseTabs
       :items="status"
@@ -67,7 +69,13 @@
         </template>
         <template #action-data="{ row }">
           <div class="flex flex-col gap-2">
-            <UButton label="Ubah" variant="link" color="blue" :padded="false" />
+            <UButton
+              label="Ubah"
+              variant="link"
+              color="blue"
+              :padded="false"
+              @click="handleEdit(row)"
+            />
             <UButton
               label="Hapus"
               variant="link"
@@ -85,6 +93,8 @@
 import VoucherCoin from "~/assets/images/voucher-cashback-coin.png";
 import VoucherPercentage from "~/assets/images/voucher-percentage.png";
 import VoucherFixed from "~/assets/images/voucher-fixed.png";
+
+const router = useRouter();
 
 const image = {
   coin: VoucherCoin,
@@ -227,6 +237,13 @@ const columns = [
     label: "Aksi",
   },
 ];
+
+function handleEdit(row) {
+  router.push({
+    path: `/seller/voucher/edit/${row.uuid}`,
+    state: row,
+  });
+}
 </script>
 
 <style lang="scss" scoped></style>
