@@ -36,3 +36,4 @@
     [x]     Slicing Seller - Voucher - List
     [x]     Slicing Seller - Voucher - Add/Edit
     [x]     Slicing Seller - Order - List
+    [x]     Slicing Seller - Order - Detail

@@ -30,7 +30,7 @@
             color="blue"
             :padded="false"
             label="Lihat Detail"
-            :to="`/seller/order/${row.ui}`"
+            :to="`/seller/order/${row.uuid}`"
           />
         </template>
       </BaseDataTable>
@@ -39,6 +39,14 @@
 </template>
 
 <script setup>
+definePageMeta({
+  breadcrumb: [
+    {
+      label: "Pesanan Saya",
+    },
+  ],
+});
+
 const status = [
   {
     label: "Semua",
