@@ -70,7 +70,7 @@
               }"
             >
               <template #leading>
-                {{ form.discount_cashback_type == "fixed" ? "Rp" : "%" }}
+                {{ form.discount_cashback_type === "fixed" ? "Rp" : "%" }}
               </template>
             </UInput>
           </div>
