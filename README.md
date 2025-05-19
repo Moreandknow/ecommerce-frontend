@@ -38,3 +38,4 @@
     [x]     Slicing Seller - Order - List
     [x]     Slicing Seller - Order - Detail
     [x]     Slicing Seller - Wallet
+    [x]     Slicing Seller - Wallet - Withdraw

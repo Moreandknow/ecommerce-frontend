@@ -5,9 +5,9 @@
         <p class="text-black/65">Saldo</p>
         <div class="flex items-center gap-4">
           <span class="text-3xl font-medium"
-            >Rp{{ formatNumber(124500000) }}</span
+            >Rp{{ formatNumber(124512600) }}</span
           >
-          <UButton class="">Tarik Dana</UButton>
+          <UButton @click="openWithdraw = true" class="">Tarik Dana</UButton>
         </div>
       </div>
       <p class="text-lg font-medium">0 Transaksi</p>
@@ -17,6 +17,41 @@
         >
       </BaseDataTable>
     </div>
+
+    <UModal v-model="openWithdraw">
+      <UCard>
+        <div class="flex justify-between items-center">
+          <span>Tarik Saldo</span>
+          <UButton
+            icon="i-heroicons:x-mark"
+            variant="ghost"
+            color="gray"
+            @clicl="openWithdraw = false"
+          />
+        </div>
+        <form class="space-y-4 mt-4">
+          <UFormGroup label="Bank">
+            <USelectMenu :options="[]" size="lg" />
+          </UFormGroup>
+          <UFormGroup label="No. Rekening">
+            <UInput size="lg" />
+          </UFormGroup>
+          <UFormGroup label="Nama Pemilik Rekening">
+            <UInput size="lg" />
+          </UFormGroup>
+          <UFormGroup label="Jumlah Penarikan">
+            <UInput type="number" size="lg" />
+          </UFormGroup>
+          <UFormGroup label="Deskripsi">
+            <UTextarea size="lg" />
+          </UFormGroup>
+          <div class="flex gap-2 items-center justify-end pt-4">
+            <UButton color="white">Tutup</UButton>
+            <UButton>Konfirmasi</UButton>
+          </div>
+        </form>
+      </UCard>
+    </UModal>
   </SellerCard>
 </template>
 
@@ -28,6 +63,8 @@ definePageMeta({
     },
   ],
 });
+
+const openWithdraw = ref(false);
 
 const columns = [
   {
