@@ -39,3 +39,5 @@
     [x]     Slicing Seller - Order - Detail
     [x]     Slicing Seller - Wallet
     [x]     Slicing Seller - Wallet - Withdraw
+
+    [x]     Reusable Function Fetch API
