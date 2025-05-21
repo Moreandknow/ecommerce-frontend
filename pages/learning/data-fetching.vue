@@ -25,17 +25,26 @@ definePageMeta({
 //     .finally(() => (loading.value = false));
 // });
 
-function getProduct() {
-  return fetch("https://dummyjson.com/products").then((res) => res.json());
-}
+// function getProduct() {
+//   return fetch("https://dummyjson.com/products").then((res) => res.json());
+// }
 
-const { data, status, error, execute } = useAsyncData("product", getProduct, {
-  immediate: true,
-});
+// const { data, status, error, execute } = useAsyncData("product", getProduct, {
+//   immediate: true,
+// });
 
-function refresh() {
-  refreshNuxtData("product");
-}
+const { data, status, execute, refresh } = useFetch(
+  "https://dummyjson.com/products",
+  {
+    key: "product-list",
+    immediate: false,
+    params: { limit: 10, skip: 10 },
+  }
+);
+
+// function refresh() {
+//   refreshNuxtData("product");
+// }
 </script>
 
 <style lang="scss" scoped></style>

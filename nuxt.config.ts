@@ -22,4 +22,7 @@ export default defineNuxtConfig({
       ],
     },
   },
+  routeRules: {
+    "/server/**": { proxy: "https://alan.co.id/**" },
+  },
 });
