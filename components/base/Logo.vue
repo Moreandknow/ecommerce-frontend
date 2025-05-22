@@ -17,7 +17,8 @@ defineProps({
 
 <style>
 .logo {
-  @apply !text-2xl !font-normal;
+  @apply !text-xl md:!text-2xl;
+  @apply !font-normal;
   @apply !no-underline;
   @apply !leading-[0.8];
   @apply text-center;

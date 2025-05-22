@@ -1,14 +1,28 @@
 <template>
-  <header class="header-orange">
+  <header class="header-orange bg-orange-500 text-white shadow-md">
     <LayoutsHeaderProfile v-if="defaultMeta.showProfile" />
+
     <div class="header-bottom">
-      <UContainer class="header-bottom-container">
-        <div class="ml-[45px] px-7">
-          <BaseLogo />
+      <UContainer
+        class="flex items-center justify-between h-14 sm:h-16 gap-2 sm:gap-3 md:gap-4"
+      >
+        <div class="shrink-0 p-1 sm:p-2 md:px-4 lg:ml-[45px] lg:px-7">
+          <NuxtLink to="/" aria-label="Go to Homepage"> <BaseLogo /> </NuxtLink>
         </div>
-        <LayoutsSearchBar v-if="defaultMeta.showSearch" class="flex-1" />
-        <UButton v-if="defaultMeta.showCart" variant="link" to="/Cart">
-          <IconCart />
+
+        <LayoutsSearchBar
+          v-if="defaultMeta.showSearch"
+          class="flex-1 min-w-0"
+        />
+
+        <UButton
+          v-if="defaultMeta.showCart"
+          variant="link"
+          to="/Cart"
+          class="p-1 text-white hover:text-orange-100 shrink-0"
+          aria-label="View Shopping Cart"
+        >
+          <IconCart class="w-6 h-6" />
         </UButton>
       </UContainer>
     </div>

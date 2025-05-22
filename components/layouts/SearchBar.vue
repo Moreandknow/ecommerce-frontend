@@ -7,10 +7,13 @@
       },
     ]"
   >
-    <input placeholder="CEK: Flash Sale Rp17 Lokal!" class="searchbar-input" />
+    <input
+      placeholder="CEK: Flash Sale Rp17 Lokal!"
+      class="searchbar-input text-xs sm:text-sm"
+    />
     <UButton
       icon="i-heroicons:magnifying-glass"
-      class="px-6"
+      class="px-3 sm:px-4 md:px-6"
       v-bind="attribute"
     />
   </div>

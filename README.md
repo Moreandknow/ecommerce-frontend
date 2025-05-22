@@ -41,3 +41,5 @@
     [x]     Slicing Seller - Wallet - Withdraw
 
     [x]     Reusable Function Fetch API
+
+    [x]     Responsive for base pages(Vibe Coded)

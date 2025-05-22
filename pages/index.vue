@@ -39,8 +39,11 @@
       </UContainer>
     </section>
 
-    <UContainer>
-      <UButton color="white" class="font-normal px-28">
+    <UContainer class="flex justify-center">
+      <UButton
+        color="white"
+        class="font-normal w-full py-3 px-6 sm:w-auto sm:px-12 md:px-20"
+      >
         Login untuk Lihat Lainnya
       </UButton>
     </UContainer>
@@ -72,7 +75,7 @@ const category = {
 
 <style scoped>
 .banner-section {
-  @apply bg-white py-7;
+  @apply bg-white py-4 sm:py-7;
 }
 
 .category-section-card {
@@ -80,7 +83,7 @@ const category = {
 }
 
 .category-section-header {
-  @apply p-5;
+  @apply p-3 sm:p-5;
   @apply border-b border-black/5;
 }
 
@@ -90,13 +93,13 @@ const category = {
 }
 
 .category-section-content {
-  @apply grid grid-cols-10;
+  @apply grid grid-cols-2 gap-2 p-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 sm:gap-3 sm:p-3;
 }
 
 .product-section-header {
   @apply bg-white;
   @apply border-b-4 border-primary;
-  @apply p-5;
+  @apply p-3 sm:p-5;
 }
 
 .product-section-header h2 {
@@ -106,7 +109,6 @@ const category = {
 }
 
 .product-section-content {
-  @apply grid grid-cols-6 gap-3;
-  @apply mt-3;
+  @apply grid grid-cols-2 gap-2 mt-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 sm:gap-3;
 }
 </style>
