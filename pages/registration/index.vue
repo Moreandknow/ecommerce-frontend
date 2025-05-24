@@ -5,7 +5,7 @@
     >
       <div class="flex justify-center items-center mb-10 md:mb-0">
         <div class="flex flex-col gap-10 md:gap-14 text-white text-center">
-          <h1 class="text-5xl sm:text-6xl lg:text-8xl leading-[0.8]">
+          <h1 class="text-5xl sm:text-6xl lg:text-8xl leading-6">
             More<br />And <br />Shop
           </h1>
           <p>
@@ -41,7 +41,7 @@
             label="ATAU"
             class="my-4"
             :ui="{
-              label: 'text-xs text-gray-400 dark:text-gray-500 font-normal', // Adjusted label style
+              label: 'text-xs text-gray-400 dark:text-gray-500 font-normal',
             }"
           />
           <div>
