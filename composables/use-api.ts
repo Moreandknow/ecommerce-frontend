@@ -5,11 +5,11 @@ export function useApi<T = unknown>(
   options: UseFetchOptions<T>
 ) {
   const toast = useToast();
-  const token = "";
+  const session = useSession();
   return useFetch(request, {
     onRequest({ options }) {
-      if (token) {
-        options.headers.set("Authorization", `Bearer ${token}`);
+      if (session.token) {
+        options.headers.set("Authorization", `Bearer ${session.token}`);
       }
     },
     onResponseError({ response }) {
@@ -20,6 +20,7 @@ export function useApi<T = unknown>(
         });
       }
     },
+    retry: false,
     ...options,
   });
 }

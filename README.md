@@ -43,3 +43,6 @@
     [x]     Reusable Function Fetch API
 
     [x]     Responsive for base pages(Vibe Coded)
+
+    [x]     Integration Google Sign In
+    [ ]     Integration Facebook Sign In

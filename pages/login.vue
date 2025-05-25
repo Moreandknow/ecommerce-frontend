@@ -77,14 +77,7 @@
               />
               Facebook
             </UButton>
-            <UButton color="white" class="flex-1 justify-center">
-              <img
-                src="~/assets/images/google.png"
-                class="w-6 h-6 mr-2"
-                alt="Google Login"
-              />
-              Google
-            </UButton>
+            <BaseButtonGoogleSignIn />
           </div>
           <p
             class="text-sm font-normal text-gray-500 dark:text-gray-400 text-center mt-8"
@@ -108,7 +101,7 @@ definePageMeta({
   header: {
     title: "Log in",
   },
-  // middleware: ["must-not-auth"],
+  middleware: ["must-not-auth"],
 });
 
 const session = useSession();
@@ -128,11 +121,11 @@ const rules = {
     isValidUsername: helpers.withMessage("Value is not valid", (value) => {
       if (value) {
         if (/^\d{4}/.test(value)) {
-          // Checking phone number
+          // checking phone number
           return /^\d+$/.test(value);
         }
 
-        // Checking email
+        // chekcing email
         return email.$validator(value);
       }
       return true;
@@ -141,8 +134,11 @@ const rules = {
   password: { required, minLength: minLength(8) },
 };
 
+const $externalResults = ref({});
+
 const v$ = useVuelidate(rules, form, {
   $autoDirty: true,
+  $externalResults,
 });
 
 const { status, execute, error, data } = useSubmit("/server/api/login");
@@ -166,11 +162,12 @@ const { execute: getProfile, status: statusProfile } = useApi(
 async function handleSubmit() {
   const isValid = await v$.value.$validate();
   if (!isValid) return;
-  // Fetch API
+  // Fetch api
 
   await execute(form.value);
 
   if (error.value) {
+    $externalResults.value = error.value.data?.meta?.validations || {};
     return;
   }
 

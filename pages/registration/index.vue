@@ -56,14 +56,7 @@
                 />
                 Facebook
               </UButton>
-              <UButton color="white" class="flex-1 justify-center">
-                <img
-                  src="~/assets/images/google.png"
-                  class="w-6 h-6 mr-2"
-                  alt="Google Login"
-                />
-                Google
-              </UButton>
+              <BaseButtonGoogleSignIn />
             </div>
           </div>
           <p

@@ -28,6 +28,12 @@ export default defineNuxtConfig({
       ],
     },
   },
+  runtimeConfig: {
+    public: {
+      clientIdGoogleSignIn: "",
+    },
+  },
+
   routeRules: {
     "/server/**": { proxy: `${import.meta.env.NUXT_BASE_URL}/**` },
   },
