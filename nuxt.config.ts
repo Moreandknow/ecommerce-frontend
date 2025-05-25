@@ -1,7 +1,13 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ["@nuxt/ui", "@nuxt/eslint", "@vueuse/nuxt", "@nuxt/image", "@pinia/nuxt"],
+  modules: [
+    "@nuxt/ui",
+    "@nuxt/eslint",
+    "@vueuse/nuxt",
+    "@nuxt/image",
+    "@pinia/nuxt",
+  ],
   compatibilityDate: "2025-04-25",
   app: {
     head: {
@@ -23,6 +29,6 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
-    "/server/**": { proxy: "https://alan.co.id/**" },
+    "/server/**": { proxy: `${import.meta.env.NUXT_BASE_URL}/**` },
   },
 });

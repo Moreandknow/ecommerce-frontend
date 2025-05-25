@@ -15,7 +15,7 @@ export function useSubmit<T = unknown>(
 
   function execute(newPayload: unknown) {
     payload.value = newPayload;
-    submit();
+    return submit();
   }
 
   return { ...others, execute };

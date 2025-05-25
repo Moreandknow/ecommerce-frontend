@@ -23,9 +23,10 @@
           <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
             Log in
           </h2>
-          <form class="mt-7 space-y-7">
-            <UFormGroup>
+          <form class="mt-7 space-y-7" @submit.prevent="handleSubmit">
+            <UFormGroup :error="v$.phone_email.$errors?.[0]?.$message">
               <UInput
+                v-model="form.phone_email"
                 placeholder="No. Handphone/Email"
                 type="email"
                 size="lg"
@@ -33,11 +34,20 @@
                 autocomplete="email"
               />
             </UFormGroup>
-            <UFormGroup>
-              <BaseInputPassword placeholder="Password" size="lg" />
+            <UFormGroup :error="v$.password.$errors?.[0]?.$message">
+              <BaseInputPassword
+                v-model="form.password"
+                placeholder="Password"
+                size="lg"
+              />
             </UFormGroup>
             <div>
-              <UButton block>LOG IN</UButton>
+              <UButton
+                type="submit"
+                block
+                :loading="status === 'pending' || statusProfile === 'pending'"
+                >LOG IN</UButton
+              >
               <UButton
                 variant="link"
                 color="blue"
@@ -91,12 +101,85 @@
 </template>
 
 <script setup>
+import useVuelidate from "@vuelidate/core";
+import { email, minLength, required, helpers } from "@vuelidate/validators";
 definePageMeta({
   layout: "auth",
   header: {
     title: "Log in",
   },
+  // middleware: ["must-not-auth"],
 });
+
+const session = useSession();
+const { profile, token: tokenSession } = storeToRefs(session);
+const token = useCookie("access_token");
+
+const nuxtApp = useNuxtApp();
+
+const form = ref({
+  phone_email: "",
+  password: "",
+});
+
+const rules = {
+  phone_email: {
+    required,
+    isValidUsername: helpers.withMessage("Value is not valid", (value) => {
+      if (value) {
+        if (/^\d{4}/.test(value)) {
+          // Checking phone number
+          return /^\d+$/.test(value);
+        }
+
+        // Checking email
+        return email.$validator(value);
+      }
+      return true;
+    }),
+  },
+  password: { required, minLength: minLength(8) },
+};
+
+const v$ = useVuelidate(rules, form, {
+  $autoDirty: true,
+});
+
+const { status, execute, error, data } = useSubmit("/server/api/login");
+
+const { execute: getProfile, status: statusProfile } = useApi(
+  "/server/api/profile",
+  {
+    immediate: false,
+    onResponse({ response }) {
+      if (response.ok) {
+        profile.value = response._data?.data;
+
+        nuxtApp.runWithContext(() => {
+          navigateTo("/");
+        });
+      }
+    },
+  }
+);
+
+async function handleSubmit() {
+  const isValid = await v$.value.$validate();
+  if (!isValid) return;
+  // Fetch API
+
+  await execute(form.value);
+
+  if (error.value) {
+    return;
+  }
+
+  if (status.value === "success" && data.value?.data?.token) {
+    tokenSession.value = data.value?.data?.token;
+    token.value = data.value?.data?.token;
+    getProfile();
+  }
+}
 </script>
 
 <style scoped></style>
