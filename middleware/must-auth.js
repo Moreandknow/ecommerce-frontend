@@ -1,6 +1,8 @@
 export default defineNuxtRouteMiddleware(async () => {
   const session = useSession();
-  if (!session.token) {
-    return navigateTo("/login");
+  if (!session.tokenCookie) {
+    return navigateTo("/login", {
+      external: true,
+    });
   }
 });
