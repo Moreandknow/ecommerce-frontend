@@ -46,3 +46,4 @@
 
     [x]     Integration Google Sign In
     [ ]     Integration Facebook Sign In
+    [x]     Integration My Account - Profile
