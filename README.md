@@ -48,3 +48,4 @@
     [ ]     Integration Facebook Sign In
     [x]     Integration My Account - Profile
     [x]     Integration Sign Up
+    [x]     Integration Forgot Password
