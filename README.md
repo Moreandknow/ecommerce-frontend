@@ -49,3 +49,5 @@
     [x]     Integration My Account - Profile
     [x]     Integration Sign Up
     [x]     Integration Forgot Password
+
+    [x]     Integration My Account - Address List
