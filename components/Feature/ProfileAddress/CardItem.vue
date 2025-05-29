@@ -50,18 +50,22 @@ const props = defineProps({
 
 const emit = defineEmits(["change", "change:status"]);
 
+const { execute, status } = useSubmit(
+  computed(() => `/server/api/address/${props.item.uuid}/set-default`)
+);
+
 // const { execute, status } = useSubmit(
 //   computed(() => `/server/api/address/${props.item.uuid}/set-default`)
 // );
 
-// async function handleUpdateDefaultAddress() {
-//   if (props.item.is_default) return;
-//   await execute();
+async function handleUpdateDefaultAddress() {
+  if (props.item.is_default) return;
+  await execute();
 
-//   if (status.value === "success") {
-//     refreshNuxtData("address-list");
-//   }
-// }
+  if (status.value === "success") {
+    refreshNuxtData("address-list");
+  }
+}
 </script>
 
 <style lang="scss" scoped></style>

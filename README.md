@@ -50,4 +50,6 @@
     [x]     Integration Sign Up
     [x]     Integration Forgot Password
 
-    [x]     Integration My Account - Address List
+    [x]     Integration My Account - Address - List
+    [x]     Integration My Account - Address - Add
+    [x]     Integration My Account - Address - Edit
