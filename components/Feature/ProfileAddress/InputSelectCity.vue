@@ -131,9 +131,18 @@ watch(
   { immediate: true }
 );
 
-const showSelected = computed(
-  () => `${form.province?.name || ""}${form.city ? `, ${form.city.name}` : ""}`
-);
+const showSelected = computed(() => {
+  const provinceName = form.province?.name;
+  const cityName = form.city?.name;
+
+  if (provinceName && cityName) {
+    return `${provinceName}, ${cityName}`;
+  }
+  if (provinceName) {
+    return provinceName;
+  }
+  return "";
+});
 
 const items = computed(() => [
   {
@@ -169,7 +178,8 @@ const { data: responseCities, status: statusCities } = useApi(
   "/server/api/city",
   {
     immediate: false,
-    params: computed(() => ({
+    method: "POST", // WAJIB POST KARENA BAKAL NGIRIM UUID PROVINCE DULU
+    body: computed(() => ({
       province_uuid: form.province?.uuid,
     })),
   }
