@@ -28,6 +28,7 @@
               :src="session.profile.photo_url"
               :alt="session.profile.name"
               icon="i-heroicons:user"
+              img-class="object-cover"
             />
             <p>{{ session.profile.name }}</p>
             <UIcon
