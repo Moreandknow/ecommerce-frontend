@@ -6,6 +6,7 @@
           :src="session.profile.photo_url"
           icon="i-heroicons:user"
           :alt="session.profile.name"
+          img-class="object-cover"
         />
         <span>{{ session.profile.name }}</span>
       </div>

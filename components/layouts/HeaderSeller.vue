@@ -4,7 +4,7 @@
     <UDropdown :items="profileItems">
       <template #default="{ open }">
         <div class="flex gap-2 items-center">
-          <UAvatar alt="Moreno Adryan" />
+          <UAvatar alt="Moreno Adryan" img-class="object-cover" />
           <p>Moreno</p>
           <UIcon
             name="i-heroicons:chevron-down-20-solid"

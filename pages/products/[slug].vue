@@ -90,7 +90,11 @@
     <UCard>
       <div class="product-seller">
         <div class="flex gap-6 items-center w-96">
-          <UAvatar :alt="dataDummy.seller.store_name" size="3xl" />
+          <UAvatar
+            :alt="dataDummy.seller.store_name"
+            size="3xl"
+            img-class="object-cover"
+          />
           <div>
             <h3>{{ dataDummy.seller.store_name }}</h3>
             <UButton
@@ -220,7 +224,7 @@
       </div>
       <div class="flex flex-col mt-1 divide-y">
         <div v-for="i in 5" :key="`review-${i}`" class="flex gap-3 py-4">
-          <UAvatar alt="Moreno Adryan" size="lg" />
+          <UAvatar alt="Moreno Adryan" size="lg" img-class="object-cover" />
           <div class="flex-1">
             <p>Moreno Adryan</p>
             <BaseRating :model-value="4" disabled class="mt-1" />
