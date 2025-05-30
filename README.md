@@ -53,3 +53,4 @@
     [x]     Integration My Account - Address - List
     [x]     Integration My Account - Address - Add
     [x]     Integration My Account - Address - Edit
+    [x]     Integration My Account - Profile - Change Photo
