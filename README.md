@@ -55,3 +55,4 @@
     [x]     Integration My Account - Address - Edit
     [x]     Integration My Account - Profile - Change Photo
     [x]     Integration My Account - Profile - Change Email
+    [x]     Integration My Account - Profile - Change Phone

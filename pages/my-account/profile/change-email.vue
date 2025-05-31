@@ -13,13 +13,16 @@
             base: 'font-normal text-black/55 text-base',
           },
         }"
-        :error="v$.email.$errors?.[0]?.$message"
+        :error="!!v$.email.$errors?.[0]?.$message"
       >
         <UInput
           v-model="form.email"
           size="lg"
           placeholder="Masukkan Email-mu"
         />
+        <p v-if="v$.$invalid" class="text-sm text-red-500 mt-1">
+          {{ v$.email.$errors?.[0]?.$message }}
+        </p>
         <UButton
           label="Selanjutnya"
           class="mt-8"
