@@ -65,7 +65,7 @@ const defaultMeta = computed(() => {
 .header-orange .header-bottom {
   @apply bg-gradient-to-b from-primary to-[#FF6633];
   @apply flex-1;
-  @apply py-4;
+  @apply py-4 pt-1;
 }
 
 .header-bottom-container {
