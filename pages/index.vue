@@ -2,7 +2,13 @@
   <div class="flex flex-col gap-6 pb-6">
     <section class="banner-section">
       <UContainer>
-        <FeatureHomepageCarousel :items="items" />
+        <BaseCarousel
+          width="796px"
+          height="235px"
+          aspect-ratio="3.39/1"
+          :items="items"
+          class="mx-auto"
+        />
       </UContainer>
     </section>
     <section class="category-section">
@@ -51,14 +57,19 @@
 </template>
 
 <script setup>
-const items = [
-  "https://picsum.photos/1920/1080?random=1",
-  "https://picsum.photos/1920/1080?random=2",
-  "https://picsum.photos/1920/1080?random=3",
-  "https://picsum.photos/1920/1080?random=4",
-  "https://picsum.photos/1920/1080?random=5",
-  "https://picsum.photos/1920/1080?random=6",
-];
+const nuxtApp = useNuxtApp();
+const { data: repsSlider } = useApi("/server/api/slider", {
+  key: "slider-banner",
+  getCachedData() {
+    return (
+      nuxtApp.payload.data?.["slider-banner"] ||
+      nuxtApp.static.data?.["slider-banner"]
+    );
+  },
+});
+const items = computed(() =>
+  (repsSlider.value?.data || [])?.map((slider) => slider.image)
+);
 
 import productImg from "@/assets/images/homepage/productimage.png";
 const productCard = {
@@ -67,6 +78,7 @@ const productCard = {
 };
 
 import elektronikImg from "@/assets/images/homepage/elektronik.png";
+import { BaseCarousel } from "#components";
 const category = {
   title: "Elektronik",
   image: elektronikImg,

@@ -12,7 +12,7 @@
       :src="item"
       :width="width"
       :height="height"
-      :placeholder="[width, height, 75, 20]"
+      :placeholder="[width, height, 75, 15]"
       densities="x1"
       format="webp"
     />

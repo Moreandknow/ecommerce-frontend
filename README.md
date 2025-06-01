@@ -56,3 +56,5 @@
     [x]     Integration My Account - Profile - Change Photo
     [x]     Integration My Account - Profile - Change Email
     [x]     Integration My Account - Profile - Change Phone
+
+    [x]     Integration Homepage - Banner
