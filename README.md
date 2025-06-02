@@ -58,3 +58,4 @@
     [x]     Integration My Account - Profile - Change Phone
 
     [x]     Integration Homepage - Banner
+    [x]     Integration Homepage - Category

@@ -19,10 +19,11 @@
           </div>
           <div class="category-section-content">
             <FeatureHomepageCategoryItem
-              v-for="i in 20"
-              :key="i"
-              :title="category.title + ' ' + i"
-              :image="category.image"
+              v-for="cat in categories"
+              :key="`cat-${cat.slug}`"
+              :title="cat.name"
+              :image="cat.icon"
+              :slug="cat.slug"
             />
           </div>
         </div>
@@ -58,7 +59,7 @@
 
 <script setup>
 const nuxtApp = useNuxtApp();
-const { data: repsSlider } = useApi("/server/api/slider", {
+const { data: respSlider } = useApi("/server/api/slider", {
   key: "slider-banner",
   getCachedData() {
     return (
@@ -67,8 +68,31 @@ const { data: repsSlider } = useApi("/server/api/slider", {
     );
   },
 });
+
+const { data: categories } = useApi("/server/api/category", {
+  key: "category-list",
+  transform(response) {
+    return (response?.data || []).reduce((result, parent) => {
+      result.push(
+        ...parent.childs.map((child) => ({
+          ...child,
+          icon: parent.icon,
+          name: `${parent.name} - ${child.name}`,
+        }))
+      );
+      return result;
+    }, []);
+  },
+  getCachedData() {
+    return (
+      nuxtApp.payload.data?.["category-list"] ||
+      nuxtApp.static.data?.["category-list"]
+    );
+  },
+});
+
 const items = computed(() =>
-  (repsSlider.value?.data || [])?.map((slider) => slider.image)
+  (respSlider.value?.data || [])?.map((slider) => slider.image)
 );
 
 import productImg from "@/assets/images/homepage/productimage.png";
@@ -95,7 +119,7 @@ const category = {
 }
 
 .category-section-header {
-  @apply p-3 sm:p-5;
+  @apply p-5 sm:p-5;
   @apply border-b border-black/5;
 }
 
@@ -105,7 +129,7 @@ const category = {
 }
 
 .category-section-content {
-  @apply grid grid-cols-2 gap-2 p-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 sm:gap-3 sm:p-3;
+  @apply grid grid-cols-2 gap-2 p-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 sm:gap-3 sm:p-3;
 }
 
 .product-section-header {
