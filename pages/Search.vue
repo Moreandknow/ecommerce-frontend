@@ -81,6 +81,10 @@ const productCard = {
   sale: 19,
 };
 
+useSeoMeta({
+  title: "Pencarian",
+});
+
 const page = ref(1);
 const items = ref(Array(55));
 </script>
