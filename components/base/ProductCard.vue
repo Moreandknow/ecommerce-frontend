@@ -1,9 +1,13 @@
 <template>
-  <NuxtLink class="product-card" to="/">
-    <div v-if="discount" class="product-discount">{{ formattedDiscount }}</div>
-    <img :src="image" />
+  <NuxtLink class="product-card" :to="`/products/${slug}`">
+    <div v-if="discount" class="product-discount">
+      -{{ formattedDiscount }}%
+    </div>
+    <NuxtImg :src="image" format="webp" />
     <div class="product-card-detail">
-      <p>{{ title }}</p>
+      <p>
+        {{ title }}
+      </p>
       <div class="product-card-footer">
         <div class="product-price">
           <p><span>Rp</span>{{ formattedPrice }}</p>
@@ -37,6 +41,10 @@ const props = defineProps({
   discount: {
     type: Number,
     default: undefined,
+  },
+  slug: {
+    type: String,
+    default: "",
   },
 });
 const formattedPrice = computed(() => formatNumber(props.price));

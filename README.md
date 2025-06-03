@@ -59,3 +59,4 @@
 
     [x]     Integration Homepage - Banner
     [x]     Integration Homepage - Category
+    [x]     Integration Homepage - List Product & Load More

@@ -33,12 +33,13 @@ export default defineNuxtConfig({
       clientIdGoogleSignIn: "",
     },
   },
-
   routeRules: {
     "/server/**": { proxy: `${import.meta.env.NUXT_BASE_URL}/**` },
     "/registration/**": { ssr: false },
+    "/cart": { ssr: false },
+    "/checkout/**": { ssr: false },
   },
   image: {
-    domains: [import.meta.env.NUXT_BASE_URL.replace("https://", "")],
+    domains: [import.meta.env.NUXT_BASE_URL?.replace("https://", "")],
   },
 });

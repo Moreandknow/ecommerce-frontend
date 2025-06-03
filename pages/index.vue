@@ -36,22 +36,34 @@
         </div>
         <div class="product-section-content">
           <BaseProductCard
-            v-for="i in 36"
-            :key="`product - ${i}`"
-            title="Kawabata Sepatu Sandal Kasual Slingback Mules"
-            :image="productCard.image"
-            :price="productCard.price"
+            v-for="product in productList?.data"
+            :key="`product-${product.uuid}`"
+            :title="product.name"
+            :price="product?.price_sale || product?.price"
+            :image="product.image_url"
+            :slug="product.slug"
+            :discount="product?.price_discount_percentage"
           />
         </div>
       </UContainer>
     </section>
 
-    <UContainer class="flex justify-center">
+    <UContainer>
       <UButton
+        v-if="!session.token"
         color="white"
-        class="font-normal w-full py-3 px-6 sm:w-auto sm:px-12 md:px-20"
+        class="font-normal px-28"
+        to="/login"
       >
         Login untuk Lihat Lainnya
+      </UButton>
+      <UButton
+        v-else-if="productList?.next_page_url"
+        color="white"
+        class="font-normal px-28"
+        @click="loadMore"
+      >
+        Lihat Lainnya
       </UButton>
     </UContainer>
   </div>
@@ -59,6 +71,14 @@
 
 <script setup>
 const nuxtApp = useNuxtApp();
+const session = useSession();
+
+const pagination = ref({
+  page: 1,
+});
+
+const { data: oldProductData } = useNuxtData("product-homepage");
+
 const { data: respSlider } = useApi("/server/api/slider", {
   key: "slider-banner",
   getCachedData() {
@@ -91,22 +111,39 @@ const { data: categories } = useApi("/server/api/category", {
   },
 });
 
+const { data: productList, execute } = useApi("/server/api/product", {
+  params: pagination,
+  key: "product-homepage",
+  onResponse({ response }) {
+    if (response.ok) {
+      pagination.value.page = response._data.data?.current_page;
+    }
+  },
+  transform(response) {
+    // return response?.data?.data || []
+    if (pagination.value.page === 1) return response?.data;
+    const newData = response?.data?.data || [];
+    return {
+      ...response.data,
+      data: [...(oldProductData.value?.data || []), ...newData],
+    };
+  },
+  watch: false,
+});
+
 const items = computed(() =>
   (respSlider.value?.data || [])?.map((slider) => slider.image)
 );
 
-import productImg from "@/assets/images/homepage/productimage.png";
-const productCard = {
-  image: productImg,
-  price: 590000,
-};
+function loadMore() {
+  pagination.value.page++;
+  execute();
+}
 
-import elektronikImg from "@/assets/images/homepage/elektronik.png";
-import { BaseCarousel } from "#components";
-const category = {
-  title: "Elektronik",
-  image: elektronikImg,
-};
+useSeoMeta({
+  ogImage: () => items.value?.[0],
+  twitterImage: () => items.value?.[0],
+});
 </script>
 
 <style scoped>
