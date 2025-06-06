@@ -122,9 +122,6 @@
 </template>
 
 <script setup>
-useSeoMeta({
-  title: "Pencarian",
-});
 const nuxtApp = useNuxtApp();
 const route = useRoute();
 const router = useRouter();
@@ -210,6 +207,23 @@ function resetFilter() {
   temporaryPrice.minimum_price = undefined;
   temporaryPrice.maximum_price = undefined;
 }
+
+const titleMeta = computed(() =>
+  route.query?.search
+    ? `Sedang mencari produk ${route.query?.search}`
+    : `Sedang mencari produk${
+        route.query?.categories ? ` ${route.query.categories}` : ""
+      }`
+);
+
+useSeoMeta({
+  title: titleMeta,
+  ogTitle: () => `${titleMeta.value} | MoreAndShop`,
+  twitterTitle: () => `${titleMeta.value} | MoreAndShop`,
+  description: titleMeta,
+  ogDescription: titleMeta,
+  twitterDescription: titleMeta,
+});
 </script>
 
 <style scoped>

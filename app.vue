@@ -13,6 +13,8 @@ useSeoMeta({
   ogTitle: "MoreAndShop | Situs Belanja Online Terkureng & Teraneh",
   ogDescription: "Tempat Belanja Online No. 1 di Cipedak dan Jagakarsa",
   ogUrl: () => url.href,
+  ogImage: "/images/banner.png",
+  twitterImage: "/images/banner.png",
   twitterTitle: "MoreAndShop | Situs Belanja Online Terkureng & Teraneh",
   twitterDescription: "[twitter:description]",
   twitterCard: "summary",

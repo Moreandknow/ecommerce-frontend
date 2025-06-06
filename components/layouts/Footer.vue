@@ -38,7 +38,7 @@
           <nav>
             <ul class="space-y-1">
               <li
-                v-for="(item, index) in jelajahiSyopo"
+                v-for="(item, index) in jelajahiMoreandshop"
                 :key="`jelajahi-${item}-${index}`"
               >
                 <UButton
@@ -526,7 +526,7 @@
 const layananPengguna = [
   "Bantuan",
   "Metode Pembayaran",
-  "SyopoPay",
+  "MoreAndShopPay",
   "Koin MoreAndShop",
   "Lacak Pesanan Pembeli",
   "Lacak Pengiriman Penjual",
@@ -535,7 +535,7 @@ const layananPengguna = [
   "Garansi MoreAndShop",
   "Hubungi Kami",
 ];
-const jelajahiSyopo = [
+const jelajahiMoreandshop = [
   "Tentang Kami",
   "Karir",
   "Kebijakan MoreAndShop",

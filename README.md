@@ -62,3 +62,4 @@
     [x]     Integration Homepage - List Product & Load More
     [x]     Integration Homepage - SEO Optimization
     [x]     Integration Search Page
+    [x]     Integration Search Page - SEO Optimization

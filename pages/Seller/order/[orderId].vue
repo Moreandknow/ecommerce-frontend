@@ -201,7 +201,7 @@ const priceItem = computed(() => [
     value: `Rp ${formatNumber(80934232)}`,
   },
   {
-    label: "4750 Koin Syopo ditukarkan",
+    label: "4750 Koin MoreAndShop ditukarkan",
     value: `Rp ${formatNumber(4750)}`,
   },
   {

@@ -5,7 +5,7 @@
     >
       <div class="flex justify-center items-center mb-10 md:mb-0">
         <div class="flex flex-col gap-10 md:gap-14 text-white text-center">
-          <h1 class="text-5xl sm:text-6xl lg:text-8xl leading-6">
+          <h1 class="text-5xl sm:text-6xl lg:text-8xl !leading-[0.8]">
             More<br />And <br />Shop
           </h1>
           <p>
