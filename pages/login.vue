@@ -69,7 +69,11 @@
           <div
             class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 h-auto sm:h-10"
           >
-            <UButton color="white" class="flex-1 justify-center">
+            <UButton
+              color="white"
+              class="flex-1 justify-center"
+              @click="facebookAlert"
+            >
               <img
                 src="~/assets/images/facebookcolor.png"
                 class="w-6 h-6 mr-2"
@@ -176,6 +180,10 @@ async function handleSubmit() {
     token.value = data.value?.data?.token;
     getProfile();
   }
+}
+
+function facebookAlert() {
+  alert("Dih kayak emak emak masih pake facebook wkwkwk PAKE GOOGLE AJA!");
 }
 </script>
 
