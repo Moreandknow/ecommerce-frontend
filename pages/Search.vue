@@ -99,7 +99,7 @@
               v-for="prod in data?.data?.data"
               :key="`product-${prod.uuid}`"
               :title="prod.name"
-              :price="prod.price || prod.price_sale"
+              :price="prod.price_sale || prod.price"
               :image="prod.image_url"
               :sale="prod.sale_count"
               :slug="prod.slug"
