@@ -57,6 +57,7 @@ const formattedDiscount = computed(() => formatNumber(props.discount));
   @apply bg-white;
   @apply border;
   @apply relative;
+  @apply flex flex-col;
 
   @apply hover:border-primary;
 }
@@ -77,6 +78,8 @@ const formattedDiscount = computed(() => formatNumber(props.discount));
 .product-card-detail {
   @apply p-2;
   @apply flex flex-col;
+  @apply flex-1;
+  @apply justify-between;
 }
 
 .product-card-detail p {

@@ -10,10 +10,21 @@
   >
     <template #default="{ item }">
       <img
-        :src="item"
+        v-if="item.type === 'img'"
+        :src="item.src"
         class="w-full aspect-[1/1] object-cover"
         draggable="false"
       />
+      <video
+        v-if="item.type === 'video'"
+        class="w-full aspect-[1/1] object-cover"
+        autoplay
+        muted
+        controls
+      >
+        <source :src="item.src" type="video/mp4" />
+        <p>Your browser does not support the video tag.</p>
+      </video>
     </template>
   </UCarousel>
   <!-- eslint-disable-next-line vue/no-multiple-template-root -->
@@ -39,7 +50,22 @@
     >
       <template #default="{ item, index }">
         <img
-          :src="item"
+          v-if="item.type === 'img'"
+          :src="item.src"
+          class="max-w-[82px] aspect-[1/1] m-1 object-cover transition-all duration-200 cursor-pointer"
+          :class="[
+            carouselElement?.page === index + 1
+              ? 'ring-2 ring-primary'
+              : 'ring-0',
+            'hover:ring-2 hover:ring-primary',
+          ]"
+          role="button"
+          @click="carouselElement?.select(index + 1)"
+          @mouseover="carouselElement?.select(index + 1)"
+        />
+        <video
+          v-if="item.type === 'video'"
+          :src="item.src"
           class="max-w-[82px] aspect-[1/1] m-1 object-cover transition-all duration-200 cursor-pointer"
           :class="[
             carouselElement?.page === index + 1
