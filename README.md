@@ -64,3 +64,6 @@
     [x]     Integration Search Page
     [x]     Integration Search Page - SEO Optimization
     [x]     Integration Product Detail - Hero
+    [x]     Integration Product Detail - Variant
+    [x]     Integration Product Detail - Shop
+    [x]     Integration Product Detail - Description

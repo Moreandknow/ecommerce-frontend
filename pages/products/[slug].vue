@@ -74,13 +74,19 @@
                   <UButton
                     v-for="values in variant.values"
                     :key="`${variant.name}-${values}`"
-                    color="white"
+                    :color="
+                      formProduct[variant.name] === values ? 'primary' : 'white'
+                    "
+                    :variant="
+                      formProduct[variant.name] === values ? 'outline' : 'solid'
+                    "
                     :ui="{
                       base: 'min-w-20 justify-center',
                       padding: {
                         sm: 'px-2 py-2',
                       },
                     }"
+                    @click="formProduct[variant.name] = values"
                   >
                     {{ values }}
                   </UButton>
@@ -90,7 +96,10 @@
           </div>
           <div class="flex gap-2 items-center mt-6">
             <p class="w-28 text-black/55 text-sm">Kuantitas</p>
-            <BaseInputQuantity v-model="quantity" />
+            <BaseInputQuantity
+              v-model="formProduct.quantity"
+              :max="detailProduct.stock || 0"
+            />
           </div>
           <div class="flex gap-4">
             <div>
@@ -165,11 +174,11 @@
                 :links="[
                   {
                     label: detailProduct.category.parent.name,
-                    to: '/',
+                    to: `/search?categories=${detailProduct.category.slug}`,
                   },
                   {
                     label: detailProduct.category.name,
-                    to: '/categories/${detailProduct.category.parent.slug}/${detailProduct.category.slug}',
+                    to: `/search?categories=${detailProduct.category.slug}`,
                   },
                 ]"
                 :ui="{
@@ -300,16 +309,35 @@
 </template>
 
 <script setup>
+const nuxtApp = useNuxtApp();
 const route = useRoute();
 
 const page = ref(1);
 const reviews = ref(Array(55));
 
-const quantity = ref(1);
+const formProduct = useState("form-product", () => ({
+  quantity: 1,
+}));
 
 const { data: detailProduct, status: statusDetail } = useApi(
   computed(() => `/server/api/product/${route.params.slug}`),
   {
+    onResponse({ response }) {
+      if (response.ok) {
+        response._data.data.variations.forEach((variation) => {
+          formProduct.value[variation.name] = "";
+        });
+      }
+
+      if (response.status === 404) {
+        nuxtApp.runWithContext(() => {
+          throw showError({
+            statusCode: 404,
+            message: "Product Tidak Ditemukan",
+          });
+        });
+      }
+    },
     transform(response) {
       return response?.data || {};
     },
