@@ -103,7 +103,12 @@
           </div>
           <div class="flex gap-4">
             <div>
-              <UButton class="mt-6" variant="soft">
+              <UButton
+                class="mt-6"
+                variant="soft"
+                :disabled="statusCart === 'pending'"
+                @click="handleAddToCart"
+              >
                 <IconCartPlus />
                 Masukkan Keranjang
               </UButton>
@@ -243,8 +248,13 @@
 </template>
 
 <script setup>
+import useVuelidate from "@vuelidate/core";
+import { maxValue, minValue, required } from "@vuelidate/validators";
+
 const nuxtApp = useNuxtApp();
 const route = useRoute();
+
+const toast = useToast();
 
 const formProduct = useState("form-product", () => ({
   quantity: 1,
@@ -274,6 +284,28 @@ const { data: detailProduct, status: statusDetail } = useApi(
     },
   }
 );
+
+const rules = computed(() => {
+  const _rule = {
+    quantity: {
+      required,
+      minValue: minValue(1),
+      maxValue: maxValue(detailProduct.value?.stock || 0),
+    },
+  };
+
+  detailProduct.value?.variations?.forEach((variant) => {
+    Object.assign(_rule, {
+      [variant.name]: { required },
+    });
+  });
+
+  return _rule;
+});
+
+const v$ = useVuelidate(rules, formProduct, {
+  $autoDirty: true,
+});
 
 const sliders = computed(() => {
   return [
@@ -315,26 +347,46 @@ const uiBreadcrumb = {
   base: "font-normal",
 };
 
-const items = [
-  "https://picsum.photos/1920/1080?random=1",
-  "https://picsum.photos/1920/1080?random=2",
-  "https://picsum.photos/1920/1080?random=3",
-  "https://picsum.photos/1920/1080?random=4",
-  "https://picsum.photos/1920/1080?random=5",
-  "https://picsum.photos/1920/1080?random=6",
-  "https://picsum.photos/1920/1080?random=1",
-  "https://picsum.photos/1920/1080?random=2",
-  "https://picsum.photos/1920/1080?random=3",
-  "https://picsum.photos/1920/1080?random=4",
-  "https://picsum.photos/1920/1080?random=5",
-  "https://picsum.photos/1920/1080?random=6",
-  "https://picsum.photos/1920/1080?random=1",
-  "https://picsum.photos/1920/1080?random=2",
-  "https://picsum.photos/1920/1080?random=3",
-  "https://picsum.photos/1920/1080?random=4",
-  "https://picsum.photos/1920/1080?random=5",
-  "https://picsum.photos/1920/1080?random=6",
-];
+const { execute: addToCart, status: statusCart } = useSubmit(
+  "/server/api/cart",
+  {
+    onResponse({ response }) {
+      if (response.ok) {
+        toast.add({
+          color: "green",
+          title: "Produk berhasil ditambahkan ke keranjang",
+        });
+        refreshNuxtData("cart");
+      }
+    },
+  }
+);
+
+async function handleAddToCart() {
+  const isValid = await v$.value.$validate();
+  if (!isValid)
+    return toast.add({
+      color: "red",
+      title: v$.value.$errors?.[0]?.$message?.replace(
+        "Value",
+        v$.value.$errors?.[0]?.$property
+      ),
+    });
+
+  const formData = new FormData();
+  formData.append("product_uuid", detailProduct.value?.uuid);
+  formData.append("qty", formProduct.value.quantity);
+
+  detailProduct.value?.variations?.forEach((variant, index) => {
+    formData.append(`variations[${index}][label]`, variant.name);
+    formData.append(
+      `variations[${index}][value]`,
+      formProduct.value[variant.name]
+    );
+  });
+
+  addToCart(formData);
+}
 </script>
 
 <style scoped>

@@ -68,3 +68,4 @@
     [x]     Integration Product Detail - Shop
     [x]     Integration Product Detail - Description
     [x]     Integration Product Detail - Review List
+    [x]     Integration Product Detail - Add To Cart

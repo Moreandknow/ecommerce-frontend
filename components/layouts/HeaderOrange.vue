@@ -14,16 +14,21 @@
           v-if="defaultMeta.showSearch"
           class="flex-1 min-w-0"
         />
-
-        <UButton
+        <UChip
           v-if="defaultMeta.showCart"
-          variant="link"
-          to="/Cart"
-          class="p-1 text-white hover:text-orange-100 shrink-0"
-          aria-label="View Shopping Cart"
+          :text="countCart"
+          size="2xl"
+          :show="countCart > 0"
         >
-          <IconCart class="w-6 h-6" />
-        </UButton>
+          <UButton
+            variant="link"
+            to="/Cart"
+            class="p-1 text-white hover:text-orange-100 shrink-0"
+            aria-label="View Shopping Cart"
+          >
+            <IconCart class="w-6 h-6" />
+          </UButton>
+        </UChip>
       </UContainer>
     </div>
   </header>
@@ -54,6 +59,18 @@ const defaultMeta = computed(() => {
         : true,
   };
 });
+
+const { data } = useApi("/server/api/cart", {
+  server: false,
+  key: "cart",
+});
+
+const countCart = computed(() =>
+  data.value?.data?.items?.reduce((result, current) => {
+    result += current.qty;
+    return result;
+  }, 0)
+);
 </script>
 
 <style scoped>
