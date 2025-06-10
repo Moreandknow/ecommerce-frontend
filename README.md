@@ -67,4 +67,4 @@
     [x]     Integration Product Detail - Variant
     [x]     Integration Product Detail - Shop
     [x]     Integration Product Detail - Description
-    [ ]     Integration Product Detail - Review List
+    [x]     Integration Product Detail - Review List

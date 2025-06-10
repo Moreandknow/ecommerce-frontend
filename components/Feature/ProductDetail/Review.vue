@@ -17,91 +17,137 @@
       </div>
       <div class="flex flex-wrap gap-2 items-center">
         <UButton
-          variant="outline"
+          v-for="filter in filterList"
+          :key="filter.label"
+          :variant="filterParam === filter.value ? 'outline' : 'solid'"
+          :color="filterParam === filter.value ? 'primary' : 'white'"
           size="xs"
           class="min-w-24 text-sm justify-center"
-          >Semua</UButton
-        >
-        <div class="flex flex-row-reverse gap-2">
-          <UButton
-            v-for="(i, index) in 5"
-            :key="`rating-${i}`"
-            color="white"
-            size="xs"
-            class="min-w-24 text-sm justify-center"
-          >
-            {{ i }} Bintang ({{ detail.review_summary[index] || 0 }})
-          </UButton>
-        </div>
-        <UButton color="white" size="xs" class="min-w-24 text-sm justify-center"
-          >Dengan Komentar ({{
-            detail.review_summary.with_description
-          }})</UButton
-        >
-        <UButton color="white" size="xs" class="min-w-24 text-sm justify-center"
-          >Dengan Media ({{ detail.review_summary.with_attachment }})</UButton
-        >
+          @click="filterParam = filter.value"
+          >{{ filter.label }}
+        </UButton>
       </div>
     </div>
     <div class="flex flex-col mt-1 divide-y">
-      <div v-for="i in 5" :key="`review-${i}`" class="flex gap-3 py-4">
-        <UAvatar alt="Moreno Adryan" size="lg" img-class="object-cover" />
+      <div
+        v-for="review in data?.data"
+        :key="`review-${review.user_name}`"
+        class="flex gap-3 py-4"
+      >
+        <UAvatar
+          :src="review.user_photo"
+          :alt="review.user_name"
+          icon="i-heroicons:user"
+          size="lg"
+          img-class="object-cover"
+        />
         <div class="flex-1">
-          <p>Moreno Adryan</p>
-          <BaseRating :model-value="4" disabled class="mt-1" />
+          <p>{{ review.user_name }}</p>
+          <BaseRating :model-value="review.star_seller" disabled class="mt-1" />
           <div class="flex gap-1 mt-0.5 text-black/55 text-xs">
-            <p>2025-5-7 8:28</p>
+            <p>{{ review.created_at }}</p>
             |
-            <p>Variasi: Vermont Camel, L</p>
+            <p>{{ review.variations }}</p>
+          </div>
+          <p v-if="review.description" class="text-sm mt-2">
+            {{ review.description }}
+          </p>
+          <div
+            v-if="review.attachments?.length"
+            class="flex gap-2 flex-wrap mt-2"
+          >
+            <NuxtImg
+              v-for="attach in review.attachments"
+              :key="attach"
+              width="72px"
+              height="72px"
+              fit="cover"
+              format="webp"
+              :src="attach"
+            />
           </div>
         </div>
       </div>
+      <div v-if="status === 'pending'" class="flex gap-2 justify-center py-6">
+        <IconLoading class="w-6 text-primary" />
+        <p>Loading...</p>
+      </div>
     </div>
-    <div class="flex justify-end pt-5">
-      <!-- <BasePagination v-model="page" :total="reviews.length" /> -->
+    <div v-if="data?.total" class="flex justify-end pt-5">
+      <BasePagination v-model="pagination.page" :total="data?.total" />
     </div>
   </UCard>
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   detail: {
     type: Object,
     default: () => ({}),
   },
 });
 
-const nuxtApp = useNuxtApp();
 const route = useRoute();
+const pagination = ref({
+  page: 1,
+});
 
-const formProduct = useState("form-product", () => ({
-  quantity: 1,
-}));
+const filterParam = ref("");
 
-const { data: detail, status: statusDetail } = useApi(
-  computed(() => `/server/api/product/${route.params.slug}`),
+const { data, status } = useApi(
+  computed(() => `/server/api/product/${route.params.slug}/review`),
   {
-    onResponse({ response }) {
-      if (response.ok) {
-        response._data.data.variations.forEach((variation) => {
-          formProduct.value[variation.name] = "";
-        });
+    params: computed(() => {
+      const filter = {};
+      if (filterParam.value) {
+        const [key, value] = filterParam.value.split(":");
+        Object.assign(filter, { [key]: value });
       }
-
-      if (response.status === 404) {
-        nuxtApp.runWithContext(() => {
-          throw showError({
-            statusCode: 404,
-            message: "Product Tidak Ditemukan",
-          });
-        });
-      }
-    },
-    transform(response) {
-      return response?.data || {};
+      return {
+        ...pagination.value,
+        ...filter,
+      };
+    }),
+    transform() {
+      return response?.data;
     },
   }
 );
+
+const filterList = computed(() => [
+  {
+    label: "Semua",
+    value: "",
+  },
+  {
+    label: `5 Bintang (${props.detail.review_summary?.[5]})`,
+    value: "rating:5",
+  },
+  {
+    label: `4 Bintang (${props.detail.review_summary?.[4]})`,
+    value: "rating:4",
+  },
+  {
+    label: `3 Bintang (${props.detail.review_summary?.[3]})`,
+    value: "rating:3",
+  },
+  {
+    label: `2 Bintang (${props.detail.review_summary?.[2]})`,
+    value: "rating:2",
+  },
+  {
+    label: `1 Bintang (${props.detail.review_summary?.[1]})`,
+    value: "rating:1",
+  },
+  {
+    label: `Dengan Komentar (${props.detail.review_summary?.with_description})`,
+    value: "with_description:1",
+  },
+  {
+    label: `Dengan Media (${props.detail.review_summary?.with_attachment})`,
+    value: "with_attachment:1",
+  },
+]);
 </script>
 
 <style scoped></style>

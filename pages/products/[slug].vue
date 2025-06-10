@@ -209,7 +209,10 @@
       </div>
     </UCard>
     <FeatureProductDetailReview :detail="detailProduct" />
-    <div class="flex flex-col gap-4 mt-2">
+    <div
+      v-if="detailProduct.other_product?.length"
+      class="flex flex-col gap-4 mt-2"
+    >
       <div class="flex justify-between gap-2 items-center">
         <h4 class="uppercase text-black/55 font-medium">
           Produk lain dari toko ini
