@@ -1,5 +1,5 @@
 <template>
-  <UButton variant="link" :color="color" :padded="false" to="/" class="logo">
+  <UButton variant="link" :color="color" :padded="false" class="logo">
     More <br />And <br />
     Shop
   </UButton>
