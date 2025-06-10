@@ -69,3 +69,4 @@
     [x]     Integration Product Detail - Description
     [x]     Integration Product Detail - Review List
     [x]     Integration Product Detail - Add To Cart
+    [x]     Integration Product Detail - SEO Optimization
