@@ -4,13 +4,21 @@
       color="white"
       icon="i-heroicons:minus"
       variant="none"
+      :disabled="disabled"
       @click="handleDecrease"
     />
-    <UInput v-model="model" type="number" :padded="false" variant="none" />
+    <UInput
+      v-model="model"
+      type="number"
+      :padded="false"
+      variant="none"
+      :disabled="disabled"
+    />
     <UButton
       color="white"
       icon="i-heroicons:plus"
       variant="none"
+      :disabled="disabled"
       @click="handleIncrease"
     />
   </div>
@@ -26,6 +34,10 @@ const props = defineProps({
     type: Number,
     default: 10,
   },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const model = defineModel({
@@ -34,12 +46,14 @@ const model = defineModel({
 });
 
 function handleDecrease() {
+  if (props.disabled) return;
   if (model.value > props.min) {
     model.value--;
   }
 }
 
 function handleIncrease() {
+  if (props.disabled) return;
   if (model.value < props.max) {
     model.value++;
   }

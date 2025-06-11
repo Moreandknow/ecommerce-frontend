@@ -5,9 +5,7 @@
   >
     <LayoutsHeaderProfile v-if="route.meta?.header?.showProfile" />
     <div class="header-bottom border-b border-gray-200 dark:border-gray-700">
-      <UContainer
-        class="flex items-center justify-between gap-2 sm:gap-4 h-14 sm:h-16"
-      >
+      <UContainer class="header-bottom-container">
         <div class="flex items-center gap-2 sm:gap-3 shrink-0">
           <BaseLogo color="orange" />
           <template v-if="route.meta.header?.title">
@@ -45,6 +43,7 @@ const route = useRoute();
 <style scoped>
 .header-bottom-container {
   @apply flex justify-between items-center gap-10;
-  @apply py-4;
+  @apply py-10;
+  @apply sm:gap-4 h-14 sm:h-16;
 }
 </style>

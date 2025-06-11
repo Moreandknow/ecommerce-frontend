@@ -21,8 +21,12 @@
     <div class="text-center w-[15%]">
       Rp{{ formatNumber(item.product.price_sale || item.product.price) }}
     </div>
-    <div class="flex justify-center flex-col items-start w-[15%] gap-2">
-      <BaseInputQuantity v-model="temporaryQty" :max="item.stock" />
+    <div class="flex justify-center flex-col items-center w-[15%] gap-2">
+      <BaseInputQuantity
+        v-model="temporaryQty"
+        :max="item.stock"
+        :disabled="statusRemoveItem === 'pending'"
+      />
       <UButton
         v-if="temporaryQty !== item.qty"
         variant="link"
@@ -30,6 +34,7 @@
         :padded="false"
         @click="handleUpdateQty"
         :loading="statusUpdateQty == 'pending'"
+        :disabled="statusRemoveItem === 'pending'"
         >Perbarui Kuantitas</UButton
       >
     </div>
@@ -41,6 +46,8 @@
         variant="link"
         color="black"
         :disabled="statusUpdateQty == -'pending'"
+        :loading="statusRemoveItem === 'pending'"
+        @click="removeItem"
         >Hapus</UButton
       >
     </div>
@@ -57,8 +64,27 @@ const props = defineProps({
 
 const temporaryQty = ref(props.item?.qty || 0);
 
-const { execute: updateQty, status: statusUpdateQty } =
-  useSubmit("/server/api/cart/");
+const { execute: updateQty, status: statusUpdateQty } = useSubmit(
+  computed(() => `/server/api/cart/${props.item.uuid}`),
+  {
+    onResponse({ response }) {
+      if (response.ok) {
+        refreshNuxtData("cart");
+      }
+    },
+  }
+);
+const { execute: removeItem, status: statusRemoveItem } = useSubmit(
+  computed(() => `/server/api/cart/${props.item.uuid}`),
+  {
+    method: "DELETE",
+    onResponse({ response }) {
+      if (response.ok) {
+        refreshNuxtData("cart");
+      }
+    },
+  }
+);
 
 function handleUpdateQty() {
   const formData = new FormData();
@@ -67,7 +93,7 @@ function handleUpdateQty() {
     formData.append(`variations[${index}][label]`, variant.label);
     formData.append(`variations[${index}][value]`, variant.value);
   });
-  formData.append("qty", temporaryQty);
+  formData.append("qty", temporaryQty.value);
   formData.append("_method", "PATCH");
 
   updateQty(formData);

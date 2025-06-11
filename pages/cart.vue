@@ -8,99 +8,105 @@
       <p>Loading...</p>
     </div>
     <template v-else>
-      <UCard>
-        <div class="cart-header">
-          <div class="w-[46%]">Produk</div>
-          <div class="text-center w-[15%]">Harga Satuan</div>
-          <div class="text-center w-[15%]">Kuantitas</div>
-          <div class="text-center w-[15%]">Total Harga</div>
-          <div class="text-center w-[10%]">Aksi</div>
-        </div>
-      </UCard>
-
-      <UCard>
-        <template #header>
-          <h2 class="text-sm text-black/85 font-medium">Shop name</h2>
-        </template>
-        <div class="grid grid-cols-1 divide-y">
-          <FeatureCartProductCart
-            v-for="item in data?.data?.items"
-            :key="`product-${item.uuid}`"
-            :item="item"
-          />
-        </div>
-      </UCard>
-      <UCard
-        :ui="{
-          header: {
-            padding: paddingCheckoutFooter,
-          },
-          body: {
-            padding: paddingCheckoutFooter,
-          },
-          footer: {
-            padding: paddingCheckoutFooter,
-          },
-          divide: 'divide-dashed',
-        }"
+      <div
+        v-if="!data?.data?.items?.length"
+        class="flex flex-col gap-4 items-center justify-center min-h-96 bg-white"
       >
-        <template #header>
-          <div class="flex justify-end gap-40">
-            <div class="flex gap-1 items-center font-medium">
-              <IconVoucher />
-              Voucher MoreAndShop
-            </div>
-            <UButton variant="link" color="blue" @click="openVoucher = true">
-              Gunakan/Masukan kode
-            </UButton>
+        <IconNoData />
+        <p class="text-2xl text-black/30">Tidak ada produk di Keranjang</p>
+      </div>
+      <template v-else>
+        <UCard>
+          <div class="cart-header">
+            <div class="w-[46%]">Produk</div>
+            <div class="text-center w-[15%]">Harga Satuan</div>
+            <div class="text-center w-[15%]">Kuantitas</div>
+            <div class="text-center w-[15%]">Total Harga</div>
+            <div class="text-center w-[10%]">Aksi</div>
           </div>
-        </template>
-        <template #default>
-          <div class="flex justify-end">
-            <div class="flex items-center gap-5">
-              <UCheckbox>
-                <template #label>
-                  <div class="flex gap-2">
-                    <IconCoin />
-                    <span class="font-medium">Koin MoreAndShop</span>
-                  </div>
-                </template>
-              </UCheckbox>
-              <span class="font-medium text-sm text-gray-500">
-                Saldo koin tidak cukup</span
-              >
-              <div class="flex justify-end flex-1 min-w-48">
-                <span class="text-gray-300">-Rp0</span>
-              </div>
-            </div>
-          </div>
-        </template>
-        <template #footer>
-          <div class="flex justify-end items-center">
-            <div class="flex gap-4">
-              <div>
-                <div class="flex items-center gap-1">
-                  <span>Total ({{ 1 }} produk)</span>
-                  <span class="text-primary font-normal text-2xl">
-                    Rp{{ formatNumber(145000) }}
-                  </span>
-                </div>
-                <div class="flex gap-6 text-sm font-normal justify-end">
-                  <span>Hemat</span>
-                  <span class="text-primary">104RB</span>
-                </div>
-              </div>
-              <UButton
-                class="px-9 min-w-52 justify-center"
-                @click="handleCheckout"
-                >Checkout</UButton
-              >
-            </div>
-          </div>
-        </template>
-      </UCard>
+        </UCard>
 
-      <ModalVoucher v-model="openVoucher" />
+        <UCard>
+          <div class="grid grid-cols-1 divide-y">
+            <FeatureCartProductCart
+              v-for="item in data?.data?.items"
+              :key="`product-${item.uuid}`"
+              :item="item"
+            />
+          </div>
+        </UCard>
+        <UCard
+          :ui="{
+            header: {
+              padding: paddingCheckoutFooter,
+            },
+            body: {
+              padding: paddingCheckoutFooter,
+            },
+            footer: {
+              padding: paddingCheckoutFooter,
+            },
+            divide: 'divide-dashed',
+          }"
+        >
+          <template #header>
+            <div class="flex justify-end gap-40">
+              <div class="flex gap-1 items-center font-medium">
+                <IconVoucher />
+                Voucher MoreAndShop
+              </div>
+              <UButton variant="link" color="blue" @click="openVoucher = true">
+                Gunakan/Masukan kode
+              </UButton>
+            </div>
+          </template>
+          <template #default>
+            <div class="flex justify-end">
+              <div class="flex items-center gap-5">
+                <UCheckbox>
+                  <template #label>
+                    <div class="flex gap-2">
+                      <IconCoin />
+                      <span class="font-medium">Koin MoreAndShop</span>
+                    </div>
+                  </template>
+                </UCheckbox>
+                <span class="font-medium text-sm text-gray-500">
+                  Saldo koin tidak cukup</span
+                >
+                <div class="flex justify-end flex-1 min-w-48">
+                  <span class="text-gray-300">-Rp0</span>
+                </div>
+              </div>
+            </div>
+          </template>
+          <template #footer>
+            <div class="flex justify-end items-center">
+              <div class="flex gap-4">
+                <div>
+                  <div class="flex items-center gap-1">
+                    <span>Total ({{ data?.data?.items?.length }} produk)</span>
+                    <span class="text-primary font-normal text-2xl">
+                      Rp{{ totalPrice }}
+                    </span>
+                  </div>
+                  <div class="flex gap-6 text-sm font-normal justify-end">
+                    <span>Hemat</span>
+                    <span class="text-primary">{{ totalDiscount }}</span>
+                  </div>
+                </div>
+                <UButton
+                  class="px-9 min-w-52 justify-center"
+                  @click="handleCheckout"
+                  >Checkout</UButton
+                >
+              </div>
+            </div>
+          </template>
+        </UCard>
+
+        <ModalVoucher v-model="openVoucher" />
+      </template>
     </template>
   </UContainer>
 </template>
@@ -133,6 +139,14 @@ const { data, status } = useApi("/server/api/cart", {
     );
   },
 });
+
+const totalPrice = computed(() =>
+  formatNumber(data.value?.data?.cart?.total || 0)
+);
+
+const totalDiscount = computed(() =>
+  formatRb(data.value?.data?.cart?.voucher_value)
+);
 
 function handleCheckout() {
   //Hit API
