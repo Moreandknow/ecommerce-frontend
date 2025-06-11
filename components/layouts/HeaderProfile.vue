@@ -70,7 +70,7 @@ const profileItems = [
 <style scoped>
 .header-profile {
   @apply bg-primary;
-  @apply py-2 pb-0;
+  @apply py-2 pb-2;
   @apply text-white;
 }
 
