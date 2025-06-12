@@ -55,15 +55,26 @@
                 <IconVoucher />
                 Voucher MoreAndShop
               </div>
-              <UButton variant="link" color="blue" @click="openVoucher = true">
-                Gunakan/Masukan kode
+              <UButton
+                variant="link"
+                color="blue"
+                :disabled="statusCoin === 'pending'"
+                @click="openVoucher = true"
+              >
+                {{ data?.data?.cart?.voucher?.code }} - Klik untuk mengganti
               </UButton>
             </div>
           </template>
           <template #default>
             <div class="flex justify-end">
               <div class="flex items-center gap-5">
-                <UCheckbox>
+                <UCheckbox
+                  v-model="useCoin"
+                  :disabled="
+                    !session.profile.balanca || statusCoin === 'pending'
+                  "
+                  @change="handlePayWithCoin"
+                >
                   <template #label>
                     <div class="flex gap-2">
                       <IconCoin />
@@ -72,10 +83,13 @@
                   </template>
                 </UCheckbox>
                 <span class="font-medium text-sm text-gray-500">
-                  Saldo koin tidak cukup</span
+                  Saldo koin
+                  {{
+                    session.profile.balance ? coinBalance : "koin tidak cukup"
+                  }}</span
                 >
                 <div class="flex justify-end flex-1 min-w-48">
-                  <span class="text-gray-300">-Rp0</span>
+                  <span class="text-gray-300">-Rp{{ payWithCoin }}</span>
                 </div>
               </div>
             </div>
@@ -97,6 +111,7 @@
                 </div>
                 <UButton
                   class="px-9 min-w-52 justify-center"
+                  :disabled="statusCoin === 'pending'"
                   @click="handleCheckout"
                   >Checkout</UButton
                 >
@@ -121,9 +136,14 @@ definePageMeta({
   },
   middleware: ["must-auth"],
 });
+
+const session = useSession();
+
 const nuxtApp = useNuxtApp();
 
 const openVoucher = ref(false);
+
+const useCoin = ref(false);
 
 const paddingCheckoutFooter = "sm:py-3 sm:px-7";
 
@@ -132,6 +152,11 @@ const router = useRouter();
 const { data, status } = useApi("/server/api/cart", {
   server: false,
   key: "cart",
+  onResponse({ response }) {
+    if (response.ok) {
+      useCoin.value = !!response._data?.data?.cart?.pay_with_coin;
+    }
+  },
   getCachedData() {
     return (
       nuxtApp.payload.data?.["category-list"] ||
@@ -144,9 +169,37 @@ const totalPrice = computed(() =>
   formatNumber(data.value?.data?.cart?.total || 0)
 );
 
-const totalDiscount = computed(() =>
-  formatRb(data.value?.data?.cart?.voucher_value)
+const totalDiscount = computed(() => {
+  const cashback = data.value?.data?.cart?.voucher_cashback || 0;
+  const discount = data.value?.data?.cart?.voucher_value || 0;
+  return formatRb(cashback + discount);
+});
+
+const coinBalance = computed(() => formatNumber(session.profile.balancse));
+
+const payWithCoin = computed(() =>
+  formatNumber(data.value?.data?.cart?.pay_with_coin)
 );
+
+const { execute: submitWithCoin, status: statusCoin } = useSubmit(
+  "/server/api/cart/toggle-coin",
+  {
+    params: computed(() => {
+      return {
+        use: useCoin.value ? 1 : 0,
+      };
+    }),
+    onResponse({ response }) {
+      if (response.ok) {
+        refreshNuxtData("cart");
+      }
+    },
+  }
+);
+
+function handlePayWithCoin() {
+  submitWithCoin();
+}
 
 function handleCheckout() {
   //Hit API
