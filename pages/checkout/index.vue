@@ -5,11 +5,11 @@
         <UIcon name="i-heroicons:map-pin-16-solid" />
         <span>Alamat Pengiriman</span>
       </div>
-      <div v-if="status === 'pending'" class="flex mt-5 items-center gap-4">
+      <div v-if="status === 'pending'" class="flex gap-4 mt-5 items-center">
         <USkeleton class="h-4 w-2/12" />
         <USkeleton class="h-4 w-4/12" />
         <USkeleton class="h-4 w-2/12" />
-        <USkeleton class="h-4 w-4/12" />
+        <USkeleton class="h-4 w-2/12" />
       </div>
       <div v-else class="flex gap-20 mt-5 items-center">
         <div>
@@ -51,51 +51,81 @@
             SubTotal produk
           </span>
         </div>
-        <p class="text-sm text-black/85 my-4">NAMA SHOP</p>
+        <div class="text-sm text-black/85 my-4"></div>
         <div>
-          <div class="flex justify-between items-center gap-4">
+          <div
+            v-for="item in data?.data?.items"
+            :key="item.uuid"
+            class="flex justify-between items-center gap-4"
+          >
             <div
               class="w-[33%] text-lg font-normal text-black/85 flex gap-2 items-center"
             >
-              <img
-                src="https://picsum.photos/1920/1080?random=1"
+              <NuxtImg
+                :src="item.product.image_url"
                 class="aspect-[1/1] w-10"
+                format="webp"
               />
               <p class="line-clamp-1 text-sm text-black/80">
-                Privacy matte/clear glossy/privacy glossy
+                {{ item.product.name }}
               </p>
             </div>
             <div class="w-[16%]">
               <p class="line-clamp-1 text-sm text-black/40">
-                Variasi: Privacy matte, iphone XS MAX
+                Variasi:
+                {{
+                  item.variations?.map((variant) => variant.value).join(", ")
+                }}
               </p>
             </div>
             <div class="w-[16%] text-sm font-normal text-right text-black/80">
-              Rp{{ formatNumber(1000) }}
+              Rp{{
+                formatNumber(item.product.price_sale || item.product.price)
+              }}
             </div>
             <div class="w-[16%] text-sm font-normal text-right text-black/80">
-              {{ formatNumber(10) }}
+              {{ formatNumber(item.qty) }}
             </div>
             <div class="w-[16%] text-sm font-medium text-right text-black/80">
-              Rp{{ formatNumber(10000000) }}
+              Rp{{ formatNumber(item.total) }}
             </div>
           </div>
         </div>
       </div>
       <div class="bg-blue-50/20 flex divide-x divide-dashed">
-        <div class="py-4 px-6 flex gap-4 w-[480px]">
+        <div class="py-4 px-6 flex gap-4 w-[480px] items-start">
           <span>Pesan:</span>
-          <UInput
-            placeholder="(Opsional) Tinggalkan pesan ke penjual"
-            class="flex-1"
-          />
+          <div class="flex flex-1 flex-col gap-2">
+            <UInput
+              v-model="notes"
+              :disabled="statusUpdateQty === 'pending'"
+              placeholder="(Opsional) Tinggalkan pesan ke penjual"
+            />
+            <UButton
+              v-if="notes"
+              variant="link"
+              :loading="statusUpdateQty === 'pending'"
+              @click="handleUpdateNotes"
+              class="self-start p-0"
+            >
+              Update Notes
+            </UButton>
+          </div>
         </div>
         <div class="divide-y divide-dashed flex-1">
           <div class="grid grid-cols-3 px-6 py-9 font-medium">
             <p class="text-sm text-black/80">Opsi Pengiriman</p>
             <div>
               <div class="flex justify-between gap-2 items-center">
-                <p class="text-sm text-black/80">REG</p>
+                <p
+                  v-if="courierSelected"
+                  class="text-sm text-black/80 uppercase"
+                >
+                  {{ courierSelected.courier }} - {{ courierSelected.service }}
+                </p>
+                <p v-else class="text-sm text-black/55">
+                  Pilih Kurir Terlebih Dahulu
+                </p>
                 <UButton
                   variant="link"
                   color="blue"
@@ -105,12 +135,16 @@
                   Ubah
                 </UButton>
               </div>
-              <p class="text-xs text-gray-400 font-normal mt-2">
-                Garansi tiba: 13-15 Ags
+              <p
+                v-if="courierSelected"
+                class="text-xs text-gray-400 font-normal mt-2"
+              >
+                Garansi tiba:
+                {{ getEstimate(data?.data?.cart?.courier_estimation) }}
               </p>
             </div>
             <p class="text-sm text-black/80 text-right">
-              Rp{{ formatNumber(1450000) }}
+              Rp{{ formatNumber(data?.data?.cart?.courier_price || 0) }}
             </p>
           </div>
           <div>
@@ -120,10 +154,17 @@
               @click="openCourier = true"
             >
               <div class="flex items-center gap-1 text-green-700">
-                <IconTruck /> Garansi tiba: 13-15 Ags
+                <IconTruck /> Garansi tiba:
+                {{ getEstimate(data?.data?.cart?.courier_estimation) }}
               </div>
               <div class="flex items-center">
-                <span class="text-gray-400">dengan J&T Jemari</span>
+                <span class="text-gray-400"
+                  >dengan
+                  <span class="uppercase"
+                    >{{ courierSelected.courier }} -
+                    {{ courierSelected.service }}</span
+                  ></span
+                >
                 <uIcon name="i-heroicons:chevron-right" class="text-gray-400" />
               </div>
             </UButton>
@@ -132,10 +173,10 @@
       </div>
       <div class="bg-blue-50/20 flex justify-end px-6 py-4 items-center gap-3">
         <span class="text-sm text-black/55"
-          >Total Pesanan ({{ 1 }} Produk)</span
+          >Total Pesanan ({{ data?.data?.items?.length }} Produk)</span
         >
         <span class="text-primary text-xl font-medium"
-          >Rp{{ formatNumber(100000) }}</span
+          >Rp{{ formatNumber(data?.data?.cart?.subtotal || 0) }}</span
         >
       </div>
     </div>
@@ -229,19 +270,24 @@
       <div
         class="border-t border-gray-100 border-dashed p-6 flex justify-end bg-yellow-50/30"
       >
-        <UButton class="w-52 justify-center" @click="handlePayment"
+        <UButton
+          class="w-52 justify-center"
+          :disabled="!courierSelected"
+          @click="handlePayment"
           >Buat Pesanan</UButton
         >
       </div>
     </div>
 
     <ModalAddress v-model:open="openAddress" v-model="addressSelected" />
-    <ModalCourier v-model:open="openCourier" />
+    <ModalCourier v-model:open="openCourier" v-model="courierSelected" />
     <ModalVoucher v-model="openVoucher" />
   </UContainer>
 </template>
 
 <script setup>
+import { format } from "date-fns";
+
 definePageMeta({
   layout: "auth",
   header: {
@@ -250,14 +296,24 @@ definePageMeta({
   },
   middleware: ["must-auth"],
 });
-
+const nuxtApp = useNuxtApp();
 const router = useRouter();
 
-const nuxtApp = useNuxtApp();
+const session = useSession();
 
 const useCoin = ref(false);
 
+const openVoucher = ref(false);
+
+const openCourier = ref(false);
+const openAddress = ref(false);
+const notes = ref("");
+
 const addressSelected = ref({});
+const courierSelected = ref({
+  courier: "",
+  service: "",
+});
 
 const paymentSelected = ref("bca-va");
 const paymentList = computed(() => [
@@ -283,13 +339,18 @@ const paymentList = computed(() => [
   },
 ]);
 
-const { data, status } = useApi("/server/api/cart", {
+const { data, status, refresh } = useApi("/server/api/cart", {
   server: false,
   key: "cart",
   onResponse({ response }) {
     if (response.ok) {
       useCoin.value = !!response._data?.data?.cart?.pay_with_coin;
-      addressSelected.value = response._data?.data?.cart?.address || [];
+      addressSelected.value = response._data?.data?.cart?.address || {};
+      courierSelected.value = {
+        courier: response._data?.data?.cart?.courier,
+        service: response._data?.data?.cart?.courier_type,
+      };
+      notes.value = response._data?.data?.items?.[0]?.notes;
     }
   },
   getCachedData() {
@@ -300,9 +361,38 @@ const { data, status } = useApi("/server/api/cart", {
   },
 });
 
-const openAddress = ref(false);
-const openCourier = ref(false);
-const openVoucher = ref(false);
+onMounted(() => {
+  refresh();
+});
+
+const product = computed(() => data.value?.data?.items?.[0]);
+
+const { execute: updateQty, status: statusUpdateQty } = useSubmit(
+  computed(() => `/server/api/cart/${product.value?.uuid}`),
+  {
+    onResponse({ response }) {
+      if (response.ok) {
+        refreshNuxtData("cart");
+      }
+    },
+  }
+);
+
+function handleUpdateNotes() {
+  if (!product.value) return;
+
+  const formData = new FormData();
+
+  product.value?.variations?.forEach((variant, index) => {
+    formData.append(`variations[${index}][label]`, variant.label);
+    formData.append(`variations[${index}][value]`, variant.value);
+  });
+  formData.append("qty", product.value.qty);
+  formData.append("note", notes.value);
+  formData.append("_method", "PATCH");
+
+  updateQty(formData);
+}
 
 function handlePayment() {
   // TODO: Hit API

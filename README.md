@@ -73,3 +73,4 @@
     [x]     Integration Cart - List
     [x]     Integration Cart - Voucher
     [x]     Integration Checkout - address
+    [x]     Integration Checkout - Product
