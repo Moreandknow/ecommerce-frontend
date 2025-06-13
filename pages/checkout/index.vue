@@ -118,7 +118,7 @@
             <div>
               <div class="flex justify-between gap-2 items-center">
                 <p
-                  v-if="courierSelected"
+                  v-if="courierSelected?.courier"
                   class="text-sm text-black/80 uppercase"
                 >
                   {{ courierSelected.courier }} - {{ courierSelected.service }}
@@ -136,7 +136,7 @@
                 </UButton>
               </div>
               <p
-                v-if="courierSelected"
+                v-if="courierSelected?.courier"
                 class="text-xs text-gray-400 font-normal mt-2"
               >
                 Garansi tiba:
@@ -149,6 +149,7 @@
           </div>
           <div>
             <UButton
+              v-if="courierSelected?.courier"
               variant="link"
               class="hover:no-underline"
               @click="openCourier = true"
@@ -176,7 +177,7 @@
           >Total Pesanan ({{ data?.data?.items?.length }} Produk)</span
         >
         <span class="text-primary text-xl font-medium"
-          >Rp{{ formatNumber(data?.data?.cart?.total || 0) }}</span
+          >Rp{{ formatNumber(data?.data?.cart?.subtotal || 0) }}</span
         >
       </div>
     </div>
@@ -191,8 +192,13 @@
             variant="link"
             color="blue"
             @click="openVoucher = true"
-            >Pilih Voucher</UButton
           >
+            {{
+              data?.data?.cart?.voucher?.code
+                ? `${data?.data?.cart?.voucher?.code} - Klik untuk mengganti`
+                : "Pilih Voucher"
+            }}
+          </UButton>
         </div>
       </template>
       <template #default>
@@ -201,11 +207,19 @@
             <IconCoin /> Koin MoreAndShop
           </div>
           <p class="font-medium text-sm text-gray-400">
-            Koin tidak dapat ditukarkan
+            {{
+              session.profile.balance
+                ? coinBalance
+                : "Koin tidak dapat ditukarkan"
+            }}
           </p>
           <div class="flex-1 flex justify-end items-center gap-2">
-            <span class="text-gray-400">[-Rp0]</span>
-            <UCheckbox disabled />
+            <span class="text-gray-400">[-Rp{{ payWithCoin }}]</span>
+            <UCheckbox
+              v-model="useCoin"
+              :disabled="!session.profile.balance || statusCoin === 'pending'"
+              @change="submitWithCoin"
+            />
           </div>
         </div>
       </template>
@@ -242,26 +256,40 @@
               <td>
                 <span class="text-sm text-black/55">SubTotal untuk produk</span>
               </td>
-              <td class="text-right min-w-44">Rp{{ formatNumber(100000) }}</td>
+              <td class="text-right min-w-44">
+                Rp{{ formatNumber(data?.data?.cart?.subtotal) }}
+              </td>
             </tr>
             <tr>
               <td>
                 <span class="text-sm text-black/55">Total Ongkos Kirim</span>
               </td>
-              <td class="text-right min-w-44">Rp{{ formatNumber(23000) }}</td>
+              <td class="text-right min-w-44">
+                Rp{{ formatNumber(data?.data?.cart?.courier_price) }}
+              </td>
             </tr>
             <tr>
               <td>
                 <span class="text-sm text-black/55">Biaya Layanan</span>
               </td>
-              <td class="text-right min-w-44">Rp{{ formatNumber(2500) }}</td>
+              <td class="text-right min-w-44">
+                Rp{{ formatNumber(data?.data?.cart?.service_fee) }}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="text-sm text-black/55">Total Diskon</span>
+              </td>
+              <td class="text-right min-w-44 text-primary">
+                -Rp{{ totalDiscount }}
+              </td>
             </tr>
             <tr>
               <td>
                 <span class="text-sm text-black/55">Total Pembayaran</span>
               </td>
               <td class="text-right min-w-44 text-3xl text-primary">
-                Rp{{ formatNumber(125500) }}
+                Rp{{ formatNumber(data?.data?.cart?.total_payment) }}
               </td>
             </tr>
           </tbody>
@@ -273,21 +301,23 @@
         <UButton
           class="w-52 justify-center"
           :disabled="!courierSelected"
+          :loading="statusCheckout === 'pending'"
           @click="handlePayment"
-          >Buat Pesanan</UButton
         >
+          Buat Pesanan
+        </UButton>
       </div>
     </div>
 
-    <ModalAddress v-model:open="openAddress" v-model="addressSelected" />
-    <ModalCourier v-model:open="openCourier" v-model="courierSelected" />
-    <ModalVoucher v-model="openVoucher" />
+    <template v-if="data?.data?.items?.length">
+      <ModalAddress v-model:open="openAddress" v-model="addressSelected" />
+      <ModalCourier v-model:open="openCourier" v-model="courierSelected" />
+      <ModalVoucher v-model="openVoucher" />
+    </template>
   </UContainer>
 </template>
 
 <script setup>
-import { format } from "date-fns";
-
 definePageMeta({
   layout: "auth",
   header: {
@@ -296,6 +326,7 @@ definePageMeta({
   },
   middleware: ["must-auth"],
 });
+
 const nuxtApp = useNuxtApp();
 const router = useRouter();
 
@@ -351,6 +382,10 @@ const { data, status, refresh } = useApi("/server/api/cart", {
         service: response._data?.data?.cart?.courier_type,
       };
       notes.value = response._data?.data?.items?.[0]?.notes;
+
+      if (response._data?.data?.items.length < 1) {
+        router.replace("/cart");
+      }
     }
   },
   getCachedData() {
@@ -378,6 +413,43 @@ const { execute: updateQty, status: statusUpdateQty } = useSubmit(
   }
 );
 
+const { execute: submitWithCoin, status: statusCoin } = useSubmit(
+  "/server/api/cart/toggle-coin",
+  {
+    params: computed(() => {
+      return {
+        use: useCoin.value ? 1 : 0,
+      };
+    }),
+    onResponse({ response }) {
+      if (response.ok) {
+        refreshNuxtData("cart");
+      }
+    },
+  }
+);
+
+const { execute: checkout, status: statusCheckout } = useSubmit(
+  "/server/api/cart/checkout",
+  {
+    onResponse({ response }) {
+      if (response.ok) {
+        router.push(`/checkout/payment/${response._data?.data?.uuid}`);
+      }
+    },
+  }
+);
+
+const coinBalance = computed(() => formatNumber(session.profile.balancse));
+const payWithCoin = computed(() =>
+  formatNumber(data.value?.data?.cart?.pay_with_coin || 0)
+);
+const totalDiscount = computed(() => {
+  const cashback = data.value?.data?.cart?.voucher_cashback || 0;
+  const discount = data.value?.data?.cart?.voucher_value || 0;
+  return formatNumber(cashback + discount);
+});
+
 function handleUpdateNotes() {
   if (!product.value) return;
 
@@ -395,8 +467,9 @@ function handleUpdateNotes() {
 }
 
 function handlePayment() {
-  // TODO: Hit API
-  router.push("/checkout/payment");
+  checkout({
+    payment_method: paymentSelected.value,
+  });
 }
 </script>
 

@@ -61,7 +61,11 @@
                 :disabled="statusCoin === 'pending'"
                 @click="openVoucher = true"
               >
-                {{ data?.data?.cart?.voucher?.code }} - Klik untuk mengganti
+                {{
+                  data?.data?.cart?.voucher?.code
+                    ? `${data?.data?.cart?.voucher?.code} - Klik untuk mengganti`
+                    : "Gunakan/ Masukkan Kode"
+                }}
               </UButton>
             </div>
           </template>
@@ -71,7 +75,7 @@
                 <UCheckbox
                   v-model="useCoin"
                   :disabled="
-                    !session.profile.balanca || statusCoin === 'pending'
+                    !session.profile.balance || statusCoin === 'pending'
                   "
                   @change="handlePayWithCoin"
                 >
