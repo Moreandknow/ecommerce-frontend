@@ -5,16 +5,30 @@
         <UIcon name="i-heroicons:map-pin-16-solid" />
         <span>Alamat Pengiriman</span>
       </div>
-      <div class="flex gap-20 mt-5 items-center">
+      <div v-if="status === 'pending'" class="flex mt-5 items-center gap-4">
+        <USkeleton class="h-4 w-2/12" />
+        <USkeleton class="h-4 w-4/12" />
+        <USkeleton class="h-4 w-2/12" />
+        <USkeleton class="h-4 w-4/12" />
+      </div>
+      <div v-else class="flex gap-20 mt-5 items-center">
         <div>
-          <p class="font-bold">Moreno Adryan</p>
-          <p class="font-bold">081248172147</p>
+          <p class="font-bold">{{ addressSelected?.receiver_name }}</p>
+          <p class="font-bold">{{ addressSelected?.receiver_phone }}</p>
         </div>
         <p class="text-black/80">
-          Jl. Raya Bahaya Awas Tertabrak No.100, RT15/RW09, Kec. Jagakarsa, Kel.
-          Srengseng Sawah, Jakarta Selatan, DKI Jakarta, ID
+          {{ addressSelected?.detail_address }} {{ addressSelected?.district }},
+          {{ addressSelected?.city?.name }},
+          {{ addressSelected?.city?.province?.name }},
+          {{ addressSelected?.postal_code }}
+          {{ addressSelected?.address_note }}
         </p>
-        <UBadge variant="outline" class="font-normal">Utama</UBadge>
+        <UBadge
+          v-if="addressSelected?.is_default"
+          variant="outline"
+          class="font-normal"
+          >Utama</UBadge
+        >
         <UButton variant="link" color="blue" @click="openAddress = true">
           Ubah
         </UButton>
@@ -221,7 +235,7 @@
       </div>
     </div>
 
-    <ModalAddress v-model:open="openAddress" />
+    <ModalAddress v-model:open="openAddress" v-model="addressSelected" />
     <ModalCourier v-model:open="openCourier" />
     <ModalVoucher v-model="openVoucher" />
   </UContainer>
@@ -234,9 +248,16 @@ definePageMeta({
     title: "Checkout",
     showProfile: true,
   },
+  middleware: ["must-auth"],
 });
 
 const router = useRouter();
+
+const nuxtApp = useNuxtApp();
+
+const useCoin = ref(false);
+
+const addressSelected = ref({});
 
 const paymentSelected = ref("bca-va");
 const paymentList = computed(() => [
@@ -261,6 +282,23 @@ const paymentList = computed(() => [
     image: "/images/logo-gopay.png",
   },
 ]);
+
+const { data, status } = useApi("/server/api/cart", {
+  server: false,
+  key: "cart",
+  onResponse({ response }) {
+    if (response.ok) {
+      useCoin.value = !!response._data?.data?.cart?.pay_with_coin;
+      addressSelected.value = response._data?.data?.cart?.address || [];
+    }
+  },
+  getCachedData() {
+    return (
+      nuxtApp.payload.data?.["category-list"] ||
+      nuxtApp.static.data?.["category-list"]
+    );
+  },
+});
 
 const openAddress = ref(false);
 const openCourier = ref(false);

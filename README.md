@@ -72,3 +72,4 @@
     [x]     Integration Product Detail - SEO Optimization
     [x]     Integration Cart - List
     [x]     Integration Cart - Voucher
+    [x]     Integration Checkout - address
