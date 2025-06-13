@@ -56,7 +56,7 @@
           <div
             v-for="item in data?.data?.items"
             :key="item.uuid"
-            class="flex justify-between items-center gap-4"
+            class="flex justify-between items-center gap-4 mb-3"
           >
             <div
               class="w-[33%] text-lg font-normal text-black/85 flex gap-2 items-center"
@@ -177,7 +177,7 @@
           >Total Pesanan ({{ data?.data?.items?.length }} Produk)</span
         >
         <span class="text-primary text-xl font-medium"
-          >Rp{{ formatNumber(data?.data?.cart?.subtotal || 0) }}</span
+          >Rp{{ formatNumber(data?.data?.cart?.total_gross || 0) }}</span
         >
       </div>
     </div>
