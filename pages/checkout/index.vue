@@ -176,7 +176,7 @@
           >Total Pesanan ({{ data?.data?.items?.length }} Produk)</span
         >
         <span class="text-primary text-xl font-medium"
-          >Rp{{ formatNumber(data?.data?.cart?.subtotal || 0) }}</span
+          >Rp{{ formatNumber(data?.data?.cart?.total || 0) }}</span
         >
       </div>
     </div>
