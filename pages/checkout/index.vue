@@ -11,27 +11,43 @@
         <USkeleton class="h-4 w-2/12" />
         <USkeleton class="h-4 w-2/12" />
       </div>
-      <div v-else class="flex gap-20 mt-5 items-center">
-        <div>
-          <p class="font-bold">{{ addressSelected?.receiver_name }}</p>
-          <p class="font-bold">{{ addressSelected?.receiver_phone }}</p>
+      <div v-else>
+        <div v-if="addressSelected?.uuid" class="flex gap-20 mt-5 items-center">
+          <div>
+            <p class="font-bold">{{ addressSelected.receiver_name }}</p>
+            <p class="font-bold">{{ addressSelected.receiver_phone }}</p>
+          </div>
+          <p class="text-black/80">
+            {{ addressSelected.detail_address }} {{ addressSelected.district }},
+            {{ addressSelected.city?.name }},
+            {{ addressSelected.city?.province?.name }},
+            {{ addressSelected.postal_code }}
+            {{ addressSelected.address_note }}
+          </p>
+          <UBadge
+            v-if="addressSelected.is_default"
+            variant="outline"
+            class="font-normal"
+          >
+            Utama
+          </UBadge>
+          <UButton
+            variant="link"
+            color="blue"
+            label="Ubah"
+            class="ml-auto"
+            @click="openAddress = true"
+          />
         </div>
-        <p class="text-black/80">
-          {{ addressSelected?.detail_address }} {{ addressSelected?.district }},
-          {{ addressSelected?.city?.name }},
-          {{ addressSelected?.city?.province?.name }},
-          {{ addressSelected?.postal_code }}
-          {{ addressSelected?.address_note }}
-        </p>
-        <UBadge
-          v-if="addressSelected?.is_default"
-          variant="outline"
-          class="font-normal"
-          >Utama</UBadge
-        >
-        <UButton variant="link" color="blue" @click="openAddress = true">
-          Ubah
-        </UButton>
+        <div v-else class="flex justify-between items-center mt-5">
+          <p class="text-black/55">Belum ada alamat yang dipilih.</p>
+          <UButton
+            variant="link"
+            color="blue"
+            label="Pilih Alamat"
+            @click="openAddress = true"
+          />
+        </div>
       </div>
     </UCard>
     <div class="bg-white divide-y divide-dashed">
