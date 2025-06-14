@@ -345,6 +345,7 @@ definePageMeta({
 
 const nuxtApp = useNuxtApp();
 const router = useRouter();
+const toast = useToast();
 
 const session = useSession();
 
@@ -362,7 +363,7 @@ const courierSelected = ref({
   service: "",
 });
 
-const paymentSelected = ref("bca-va");
+const paymentSelected = ref(null);
 const paymentList = computed(() => [
   {
     value: "bni_va",
@@ -483,6 +484,34 @@ function handleUpdateNotes() {
 }
 
 function handlePayment() {
+  // 1. Cek Alamat
+  if (!addressSelected.value?.uuid) {
+    toast.add({
+      color: "red",
+      title: "Pilih alamat pengiriman terlebih dahulu.",
+    });
+    return;
+  }
+
+  // 2. Cek Kurir
+  if (!courierSelected.value?.courier) {
+    toast.add({
+      color: "red",
+      title: "Pilih opsi pengiriman terlebih dahulu.",
+    });
+    return;
+  }
+
+  // 3. Cek Metode Pembayaran
+  if (!paymentSelected.value) {
+    toast.add({
+      color: "red",
+      title: "Pilih metode pembayaran terlebih dahulu.",
+    });
+    return;
+  }
+
+  // Kalo semua lolos, baru gas checkout
   checkout({
     payment_method: paymentSelected.value,
   });
