@@ -511,7 +511,7 @@ function handlePayment() {
     return;
   }
 
-  // Kalo semua lolos, baru gas checkout
+  // Kalo semua lolos, baru checkout
   checkout({
     payment_method: paymentSelected.value,
   });

@@ -108,7 +108,13 @@
                       Rp{{ totalPrice }}
                     </span>
                   </div>
-                  <div class="flex gap-6 text-sm font-normal justify-end">
+                  <div
+                    v-if="
+                      data.value?.data?.cart?.voucher_cashback ===
+                      data.value?.data?.cart?.voucher_value
+                    "
+                    class="flex gap-6 text-sm font-normal justify-end"
+                  >
                     <span>Hemat</span>
                     <span class="text-primary">{{ totalDiscount }}</span>
                   </div>
