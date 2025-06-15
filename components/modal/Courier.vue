@@ -81,10 +81,12 @@ const model = defineModel({
 const courierSelected = ref();
 
 const { data: courierTiki, status: statusTiki } = useApi(
-  "/server/api/cart/shipping?courier=tiki"
+  "/server/api/cart/shipping?courier=tiki",
+  { showErrorToast: false }
 );
 const { data: courierJne, status: statusJne } = useApi(
-  "/server/api/cart/shipping?courier=jne"
+  "/server/api/cart/shipping?courier=jne",
+  { showErrorToast: false }
 );
 
 const { execute, status: statusUpdate } = useSubmit(
