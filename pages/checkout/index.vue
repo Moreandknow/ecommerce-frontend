@@ -132,7 +132,11 @@
           <div class="grid grid-cols-3 px-6 py-9 font-medium">
             <p class="text-sm text-black/80">Opsi Pengiriman</p>
             <div>
-              <div class="flex justify-between gap-2 items-center">
+              <div v-if="isLoadingCourier" class="space-y-2">
+                <USkeleton class="h-5 w-48" />
+                <USkeleton class="h-4 w-32" />
+              </div>
+              <div v-else class="flex justify-between gap-2 items-center">
                 <p
                   v-if="courierSelected?.courier"
                   class="text-sm text-black/80 uppercase"
@@ -466,6 +470,28 @@ const totalDiscount = computed(() => {
   const discount = data.value?.data?.cart?.voucher_value || 0;
   return formatNumber(cashback + discount);
 });
+
+const { data: courierTiki, status: statusTiki } = useApi(
+  "/server/api/cart/shipping?courier=tiki"
+);
+const { data: courierJne, status: statusJne } = useApi(
+  "/server/api/cart/shipping?courier=jne"
+);
+
+const isLoadingCourier = computed(() => {
+  return statusTiki.value === "pending" || statusJne.value === "pending";
+});
+
+function handleOpenCourierModal() {
+  if (!addressSelected.value?.uuid) {
+    toast.add({
+      color: "red",
+      title: "Pilih alamat pengiriman terlebih dahulu.",
+    });
+    return;
+  }
+  openCourier.value = true;
+}
 
 function handleUpdateNotes() {
   if (!product.value) return;
