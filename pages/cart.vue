@@ -110,8 +110,8 @@
                   </div>
                   <div
                     v-if="
-                      data.value?.data?.cart?.voucher_cashback ===
-                      data.value?.data?.cart?.voucher_value
+                      data.data?.cart?.voucher_cashback ||
+                      data.data?.cart?.voucher_value
                     "
                     class="flex gap-6 text-sm font-normal justify-end"
                   >
@@ -185,7 +185,7 @@ const totalDiscount = computed(() => {
   return formatRb(cashback + discount);
 });
 
-const coinBalance = computed(() => formatNumber(session.profile.balancse));
+const coinBalance = computed(() => formatNumber(session.profile.balance));
 
 const payWithCoin = computed(() =>
   formatNumber(data.value?.data?.cart?.pay_with_coin)

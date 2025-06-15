@@ -12,6 +12,7 @@
             icon="i-heroicons:arrow-left"
             variant="link"
             color="black"
+            @click="$router.back()"
           />
           <p class="text-xl">Pembayaran</p>
         </div>
@@ -133,7 +134,7 @@ const { data, status, refresh } = useApi(
         if (response._data?.data?.is_paid) isSuccess.value = true;
         const expiredAt = response._data?.data?.payment_expired_at;
         if (expiredAt) {
-          const seconds = getSecondsFromData(expiredAt);
+          const seconds = getSecondsFromDate(expiredAt);
           startCountdown(seconds);
         }
       }
@@ -142,9 +143,9 @@ const { data, status, refresh } = useApi(
 );
 
 const countdownDisplay = computed(() => {
-  const _countdown = displayValue.value.split(";");
+  const _countdown = displayValue.value.split(":");
   if (!_countdown[2]) {
-    if (!_countdown[1]) return `80 Jam 00 Menit ${_countdown[0]} Detik`;
+    if (!_countdown[1]) return `00 Jam 00 Menit ${_countdown[0]} Detik`;
     return `00 Jam ${_countdown[0]} Menit ${_countdown[1]} Detik`;
   }
   return `${_countdown[0]} Jam ${_countdown[1]} Menit ${_countdown[2]} Detik`;
@@ -155,7 +156,7 @@ const paymentSelected = computed(() => data.value?.data?.payment_method);
 const paymentExpriredAt = computed(() => {
   if (data.value?.data?.payment_expired_at) {
     const expiredAt = new Date(data.value.data.payment_expired_at);
-    return format(expiredAt, "dd MM yyyy, HH:mm");
+    return format(expiredAt, "dd MMM yyyy, HH:mm");
   }
   return "";
 });
