@@ -60,8 +60,29 @@
                   </UButton>
                 </div>
               </div>
+              <div v-if="paymentSelected === 'bca_va'">
+                <p>No. Rekening</p>
+                <div class="flex gap-4 mt-1 items-center">
+                  <p class="text-primary text-xl">
+                    {{ data?.data?.virtual_account_number }}
+                  </p>
+                  <UButton
+                    variant="link"
+                    color="teal"
+                    :padded="false"
+                    @click="handleCopy"
+                  >
+                    SALIN
+                  </UButton>
+                </div>
+              </div>
               <img
                 v-if="paymentSelected === 'qris'"
+                :src="data?.data?.qris_image_url"
+                class="w-60 mx-auto"
+              />
+              <img
+                v-if="paymentSelected === 'gopay'"
                 :src="data?.data?.qris_image_url"
                 class="w-60 mx-auto"
               />

@@ -44,3 +44,16 @@ export function getEstimate(numberEstimate) {
     }
   }
 }
+
+export function getSecondsFromDate(stringDate) {
+  const targetTime = new Date(stringDate);
+
+  // Mengambil waktu saat ini
+  const currentTime = new Date();
+
+  // Menghitung selisih waktu dalam milidetik
+  const differenceInMillis = targetTime - currentTime;
+
+  // Mengonversi selisih waktu dari milidetik ke detik
+  return Math.floor(differenceInMillis / 1000);
+}
