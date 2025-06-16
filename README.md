@@ -75,4 +75,4 @@
     [x]     Integration Checkout - address
     [x]     Integration Checkout - Product
     [x]     Integration Checkout - Price
-    [x]     Integration Checkout - Payment
+    [x]     Integration Checkout - Payment MidTrans
