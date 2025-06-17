@@ -76,3 +76,4 @@
     [x]     Integration Checkout - Product
     [x]     Integration Checkout - Price
     [x]     Integration Checkout - Payment MidTrans
+    [x]     Integration Order List

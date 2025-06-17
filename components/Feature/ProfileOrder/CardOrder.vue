@@ -35,7 +35,7 @@
       </div>
       <hr class="my-3" />
       <NuxtLink class="space-y-3" :to="`/my-account/orders/${order.uuid}`">
-        <LazyFeatureProfileOrderCardProduct
+        <FeatureProfileOrderCardProduct
           v-for="product in order?.items || []"
           :key="`order-${order.uuid}product-${product.uuid}`"
           :item="product"
@@ -76,7 +76,7 @@
 </template>
 
 <script setup>
-import { addDays, format, differenceInDays } from "date-fns";
+import { addDays, differenceInDays, format } from "date-fns";
 import { STATUS_ORDER } from "~/constant/status";
 
 const props = defineProps({

@@ -1,7 +1,15 @@
 <template>
-  <UButton variant="link" :color="color" :padded="false" to="/" class="logo">
-    More <br />And <br />
-    Shop
+  <UButton
+    variant="link"
+    :color="color"
+    :padded="false"
+    @click="handleHomepage"
+    class="logo"
+  >
+    <span>
+      More <br />And <br />
+      Shop
+    </span>
   </UButton>
 </template>
 
@@ -13,6 +21,10 @@ defineProps({
     validator: (propsValue) => ["white", "orange"].includes(propsValue),
   },
 });
+
+function handleHomepage() {
+  navigateTo("/");
+}
 </script>
 
 <style>

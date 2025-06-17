@@ -33,6 +33,7 @@
       :order="order"
       @review="handleReview"
     />
+    <div ref="observerElement" />
     <BaseLoading v-if="status === 'pending'" />
     <template v-else-if="(data?.data || []).length === 0">
       <p class="text-sm font-medium text-black/55 py-4 text-center">
@@ -51,7 +52,7 @@
             <span class="font-medium">Beri penilaian & dapatkan 25 koin!</span>
           </div>
           <div class="space-y-2">
-            <LazyFeatureProfileOrderCardProduct
+            <FeatureProfileOrderCardProduct
               v-for="a in 3"
               :key="`product-${a}`"
               hide-price
@@ -135,12 +136,17 @@ definePageMeta({
   wrapper: "div",
 });
 
+const { data: oldOrders } = useNuxtData("order-customer");
+
 const openReview = ref(false);
 
 const formRating = reactive({
   rating: 0,
   courierRating: 0,
 });
+
+const observerElement = ref();
+let observer = null;
 
 const pagination = ref({
   page: 1,
@@ -191,6 +197,23 @@ const items = [
 ];
 
 const { data, status } = useApi("/server/api/order", {
+  key: "order-customer",
+  onResponse({ response }) {
+    if (response.ok) {
+      if (!observer) {
+        observer = new IntersectionObserver((entries) => {
+          if (
+            entries[0].isIntersecting &&
+            !!response._data.data.next_page_url &&
+            pagination.value.page < response._data.data.last_page
+          ) {
+            pagination.value.page++;
+          }
+        });
+        observer.observe(observerElement.value);
+      }
+    }
+  },
   params: computed(() => {
     const lastStatus =
       formFilter.value.status > 0
@@ -203,14 +226,37 @@ const { data, status } = useApi("/server/api/order", {
     };
   }),
   transform(response) {
-    return response?.data;
+    if (pagination.value.page === 1) return response?.data;
+    const newData = response?.data?.data || [];
+    return {
+      ...response.data,
+      data: [...(oldOrders.value?.data || []), ...newData],
+    };
   },
+});
+
+onUnmounted(() => {
+  if (observer) {
+    observer.disconnect();
+    observer = null;
+  }
+});
+
+watch(searchDebounce, () => {
+  pagination.value.page = 1;
 });
 
 watch(
   () => formFilter.value.status,
   () => {
+    onUnmounted(() => {
+      if (observer) {
+        observer.disconnect();
+        observer = null;
+      }
+    });
     formFilter.value.search = "";
+    pagination.value.page = 1;
   }
 );
 

@@ -20,7 +20,7 @@
       :items="[
         {
           defaultOpen: $route.path.includes(item.children?.[0]?.to),
-          ...item,
+          ...accordionItemProps,
         },
       ]"
       :ui="{
@@ -54,7 +54,7 @@
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   item: {
     type: Object,
     default: () => ({}),
@@ -62,6 +62,11 @@ defineProps({
 });
 
 const [DefineItem, ReuseItem] = createReusableTemplate();
+
+const accordionItemProps = computed(() => {
+  const { children, ...rest } = props.item;
+  return rest;
+});
 </script>
 
 <style scoped>
