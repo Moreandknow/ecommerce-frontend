@@ -52,7 +52,7 @@
           </div>
         </div>
         <div
-          v-if="order?.last_status?.status === 'done' && canReview"
+          v-if="order?.last_status?.status === 'done'"
           class="flex justify-between items-center gap-4"
         >
           <div class="text-xs">
@@ -61,7 +61,7 @@
               <span class="underline">{{ lastReviewDate }}</span>
             </p>
             <p class="text-primary">
-              Nilai sekarang & dapatkan 25 koin MoreAndShop!
+              Nilai sekarang & dapatkan 25 Koin MoreAndShop!
             </p>
           </div>
           <UButton

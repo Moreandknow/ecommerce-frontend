@@ -397,8 +397,8 @@ const titleMeta = computed(
 
 useSeoMeta({
   title: titleMeta,
-  ogTitle: () => `${titleMeta.value} | Syopo`,
-  twitterTitle: () => `${titleMeta.value} | Syopo`,
+  ogTitle: () => `${titleMeta.value} | MoreAndShop`,
+  twitterTitle: () => `${titleMeta.value} | MoreAndShop`,
   ogImage: () => detailProduct.value?.images?.[0],
   twitterImage: () => detailProduct.value?.images?.[0],
   twitterCard: "summary_large_image",

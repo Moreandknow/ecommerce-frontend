@@ -2,7 +2,7 @@ export function useMasking() {
   const maskEmail = (email) => {
     if (!email) return "";
 
-    const [username, domain] = email.split("@"); //irsyaad@maskemail.com => ['irsyaad', 'maskemail.com']
+    const [username, domain] = email.split("@"); //moreno@maskemail.com => ['moreno', 'maskemail.com']
     const [domainName, domainExt] = domain.split("."); // maskemail.com => ['maskemail', 'com']
 
     // Mask username with first 2 chars visible

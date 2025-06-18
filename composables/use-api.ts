@@ -1,7 +1,7 @@
 import type { UseFetchOptions } from "#app";
 
 type UseApiOptions<T> = UseFetchOptions<T> & {
-  showErrorToast?: boolean;
+  showErrorToast?: true;
 };
 
 export function useApi<T = unknown>(
