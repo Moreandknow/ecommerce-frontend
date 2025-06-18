@@ -52,8 +52,7 @@ const form = ref([
     showUsername: false,
   },
 ]);
-const v$ = useVuelidate(rules, formRating, {
-  $autoDirty: true,
+const v$ = useVuelidate({}, form, {
   $scope: "review",
 });
 function setDefaultData(newOrder) {
