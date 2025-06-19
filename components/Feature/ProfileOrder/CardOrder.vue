@@ -15,7 +15,7 @@
           <UButton
             color="white"
             size="xs"
-            :to="`/shop/${order?.seller?.user_name}`"
+            :to="`/shop/${order?.seller?.username}`"
             ><IconShop />Kunjungi Toko</UButton
           >
         </div>

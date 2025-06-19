@@ -83,7 +83,7 @@
           <UButton
             color="white"
             size="xs"
-            :to="`/shop/${data?.seller?.user_name}`"
+            :to="`/shop/${data?.seller?.username}`"
             ><IconShop />Kunjungi Toko</UButton
           >
         </div>
@@ -159,36 +159,60 @@ const lastStatus = computed(
   () => data.value?.status?.[(data.value?.status?.length || 0) - 1]
 );
 
-const timelineStatus = [
-  {
-    title: "Pesanan Dibuat",
-    time: "10-05-2025 16:26",
-    passed: true,
-    icon: IconOrder,
-  },
-  {
-    title: "Pesanan Dibayarkan (Rp144.400)",
-    time: "12-05-2025 16:26",
-    passed: true,
-    icon: IconPaid,
-  },
-  {
-    title: "Sedang Dikemas",
-    time: "",
-    icon: IconTruckOutline,
-    active: true,
-  },
-  {
-    title: "Dikirim",
-    time: "",
-    icon: IconInbox,
-  },
-  {
-    title: "Belum Dinilai",
-    time: "",
-    icon: IconStars,
-  },
-];
+const timelineStatus = computed(() => {
+  const pendingStatus = data.value?.status?.find(
+    (item) => item.status === "pending_payment"
+  );
+  const paidStatus = data.value?.status?.find((item) => item.status === "paid");
+  const processStatus = data.value?.status?.find(
+    (item) => item.status === "on_processing"
+  );
+  const deliveryStatus = data.value?.status?.find(
+    (item) => item.status === "on_delivery"
+  );
+  const doneStatus = data.value?.status?.find((item) => item.status === "done");
+  return [
+    {
+      title: "Pesanan Dibuat",
+      time: pendingStatus?.created_at,
+      passed:
+        !["pending_payment", "failed"].includes(lastStatus.value?.status) &&
+        pendingStatus,
+      active: lastStatus.value?.status === "pending_payment",
+      icon: IconOrder,
+    },
+    {
+      title: `Pesanan${
+        paidStatus ? " " : " Belum"
+      } Dibayarkan (Rp${formatNumber(data.value?.total_payment)})`,
+      time: paidStatus?.created_at,
+      passed: lastStatus.value?.status !== "paid" && paidStatus,
+      active: lastStatus.value?.status === "paid",
+      icon: IconPaid,
+    },
+    {
+      title: "Sedang Dikemas",
+      time: processStatus?.created_at,
+      icon: IconTruckOutline,
+      passed: lastStatus.value?.status !== "on_processing" && processStatus,
+      active: lastStatus.value?.status === "on_processing",
+    },
+    {
+      title: "Dikirim",
+      time: deliveryStatus?.created_at,
+      icon: IconInbox,
+      passed: lastStatus.value?.status !== "on_delivery" && deliveryStatus,
+      active: lastStatus.value?.status === "on_delivery",
+    },
+    {
+      title: data.value?.items?.[0]?.is_reviewed ? "Selesai" : "Belum Dinilai",
+      time: data.value?.items?.[0]?.is_reviewed ? doneStatus?.created_at : "",
+      icon: IconStars,
+      passed: lastStatus.value?.status !== "done" && doneStatus,
+      active: lastStatus.value?.status === "done",
+    },
+  ];
+});
 
 const priceItem = computed(() => [
   {
