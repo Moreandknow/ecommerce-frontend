@@ -1,5 +1,6 @@
 <template>
-  <div class="text-sm text-black/80">
+  <BaseLoading v-if="status === 'pending'" />
+  <div v-else class="text-sm text-black/80">
     <div class="bg-white divide-y divide-dashed">
       <div class="flex justify-between gap-4 px-6 py-5">
         <UButton
@@ -11,10 +12,10 @@
           color="gray"
         />
         <div class="divide-x">
-          <span class="px-4">NO. PESANAN. XXXXXX</span>
-          <span class="px-4 uppercase text-primary"
-            >PESANAN SEDANG DISIAPKAN</span
-          >
+          <span class="px-4">NO. PESANAN. {{ data?.invoice_number }}</span>
+          <span class="px-4 uppercase text-primary">{{
+            lastStatus?.description
+          }}</span>
         </div>
       </div>
       <div class="px-6 py-10">
@@ -23,13 +24,13 @@
           class="grid grid-cols-5"
         />
       </div>
-      <div class="bg-yellow-50/30 flex justify-end px-6 py-3">
+      <!-- <div class="bg-yellow-50/30 flex justify-end px-6 py-3">
         <UButton
           color="white"
           class="min-w-56 justify-center"
           label="Batalkan"
         />
-      </div>
+      </div> -->
       <div class="bg-yellow-50/30 flex justify-between px-6 py-3 items-center">
         <p class="text-black/55">
           produk diperkirakan akan sampai pada
@@ -57,9 +58,17 @@
         </div>
         <div class="flex divide-x mt-3">
           <div class="w-80 py-2 pr-3">
-            <p>Moreno Adryan</p>
-            <p class="text-black/55 mt-2">08152591125</p>
-            <p class="text-black/55">Jl. Raya Bahaya Awas Tertabrak</p>
+            <p>{{ data?.address?.receiver_name }}</p>
+            <p class="text-black/55 mt-2">
+              {{ data?.address?.receiver_phone }}
+            </p>
+            <p class="text-black/55">
+              {{ data?.address.detail_address }} {{ data?.address.district }},
+              {{ data?.address.city?.name }},
+              {{ data?.address.city?.province?.name }},
+              {{ data?.address.postal_code }}
+              {{ data?.address.address_note }}
+            </p>
           </div>
           <div class="pl-3">
             <BaseTimelineVertical :items="orderHistory" />
@@ -70,18 +79,22 @@
     <div class="bg-gray-50 divide-y">
       <div class="px-6 py-3">
         <div class="flex gap-2 items-center">
-          <span class="font-semibold">Moreno Store</span>
-          <UButton color="white" size="xs" :to="`/shop/username-shop`"
+          <span class="font-semibold">{{ data?.seller?.store_name }}</span>
+          <UButton
+            color="white"
+            size="xs"
+            :to="`/shop/${data?.seller?.user_name}`"
             ><IconShop />Kunjungi Toko</UButton
           >
         </div>
         <hr class="mt-3" />
         <div class="divide-y">
           <LazyFeatureProfileOrderCardProduct
-            v-for="a in 3"
-            :key="`product-${a}`"
+            v-for="item in data?.items"
+            :key="`product-${item.uuid}`"
             size="sm"
             class="py-3"
+            :item="item"
           />
         </div>
       </div>
@@ -117,17 +130,34 @@ definePageMeta({
   wrapper: "div",
 });
 
-const orderHistory = [
-  {
-    title: "Pesanan Dibayar",
-    time: "11-08-2024 16:27",
-    active: true,
+const route = useRoute();
+const nuxtApp = useNuxtApp();
+const { data, status } = useApi(`/server/api/order/${route.params.orderId}`, {
+  key: `order-customer-${route.params.orderId}`,
+  getCachedData() {
+    return (
+      nuxtApp.payload.data?.[`order-customer-${route.params.orderId}`] ||
+      nuxtApp.static.data?.[`order-customer-${route.params.orderId}`]
+    );
   },
-  {
-    title: "Pesanan Dibuat",
-    time: "11-08-2024 16:26",
+  transform(response) {
+    return response?.data || {};
   },
-];
+});
+
+const orderHistory = computed(() => {
+  return data.value?.status
+    ?.map((item, index, arr) => ({
+      title: item?.description,
+      time: item?.created_at,
+      active: index === arr.length - 1,
+    }))
+    .sort((a, b) => new Date(b.time) - new Date(a.time));
+});
+
+const lastStatus = computed(
+  () => data.value?.status?.[(data.value?.status?.length || 0) - 1]
+);
 
 const timelineStatus = [
   {
@@ -163,32 +193,43 @@ const timelineStatus = [
 const priceItem = computed(() => [
   {
     label: "Subtotal Produk",
-    value: `Rp ${formatNumber(80934232)}`,
+    value: `Rp ${formatNumber(data.value?.subtotal)}`,
   },
   {
     label: "Subtotal Pengiriman",
-    value: `Rp ${formatNumber(80934232)}`,
+    value: `Rp ${formatNumber(data.value?.courier_price)}`,
   },
   {
     label: "Voucher Digunakan",
-    value: `Rp ${formatNumber(80934232)}`,
+    value: `Rp ${formatNumber(data.value?.voucher_value)}`,
   },
   {
-    label: "4750 Koin MoreAndShop ditukarkan",
-    value: `Rp ${formatNumber(4750)}`,
+    label: "Cashback Koin",
+    value: `Rp ${formatNumber(data.value?.voucher_cashback || 0)}`,
+  },
+  {
+    label: `${data.value?.pay_with_coin} Koin MoreAndShop ditukarkan`,
+    value: `Rp ${formatNumber(`${data.value?.pay_with_coin}`)}`,
   },
   {
     label: "Biaya Layanan",
-    value: `Rp ${formatNumber(4750)}`,
+    value: `Rp ${formatNumber(data.value?.service_fee)}`,
   },
   {
     label: "Total Pesanan",
-    value: `Rp ${formatNumber(4750)}`,
+    value: `Rp ${formatNumber(data.value?.total_payment)}`,
     class: "text-primary text-2xl",
   },
   {
     label: "Metode Pembayaran",
-    value: "Virtual Account",
+    value:
+      data.value?.payment_method === "bca_va"
+        ? "Virtual Account BCA"
+        : data.value?.payment_method === "bni_va"
+        ? "Virtual Account BNI"
+        : data.value?.payment_method === "gopay"
+        ? "GoPay"
+        : "QRIS",
   },
 ]);
 </script>
