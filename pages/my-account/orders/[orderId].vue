@@ -32,6 +32,16 @@
         />
       </div> -->
       <div
+        v-if="lastStatus?.status === 'pending_payment'"
+        class="bg-yellow-50/30 flex justify-end px-6 py-3"
+      >
+        <UButton
+          class="min-w-56 justify-center"
+          label="Bayar"
+          :to="`/checkout/payment/${data.uuid}`"
+        />
+      </div>
+      <div
         v-if="lastStatus?.status === 'on_delivery'"
         class="bg-yellow-50/30 flex justify-between px-6 py-3 items-center"
       >
