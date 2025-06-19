@@ -79,4 +79,4 @@
 
     [x]     Integration Order List
     [x]     Integration Order List - review
-    [ ]     Integration Order Detail
+    [x]     Integration Order Detail

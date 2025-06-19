@@ -1,12 +1,16 @@
 import { addDays, format } from "date-fns";
 
-export function getEstimate(numberEstimate) {
+export function getEstimate(numberEstimate, options = {}) {
+  const { returnObject = false } = options;
   if (!numberEstimate) {
-    return "";
+    return returnObject ? { start: null, end: null } : "";
   }
 
   const today = new Date();
   const estimationString = numberEstimate.toString();
+
+  let futureDateStart = null;
+  let futureDateEnd = null;
 
   // Kalo data estimatenya d-d
   if (estimationString.includes("-")) {
@@ -14,34 +18,42 @@ export function getEstimate(numberEstimate) {
       .split("-")
       .map((d) => parseInt(d.trim(), 10));
 
-    if (isNaN(startDay) || isNaN(endDay)) return "";
-
-    const startDate = addDays(today, startDay);
-    const endDate = addDays(today, endDay);
-
-    if (startDate.getMonth() === endDate.getMonth()) {
-      return `${format(startDate, "d")} - ${format(endDate, "d MMM")}`;
-    } else {
-      return `${format(startDate, "d MMM")} - ${format(endDate, "d MMM")}`;
+    if (isNaN(startDay) || isNaN(endDay)) {
+      return returnObject ? { start: null, end: null } : "";
     }
-  }
 
-  // Kalo data estimatenya d, d + 2
-  else {
+    futureDateStart = addDays(today, startDay);
+    futureDateEnd = addDays(today, endDay);
+  } else {
     const startDay = parseInt(estimationString.trim(), 10);
 
-    if (isNaN(startDay)) return "";
+    if (isNaN(startDay)) {
+      return returnObject ? { start: null, end: null } : "";
+    }
 
     const endDay = startDay + 2;
 
-    const startDate = addDays(today, startDay);
-    const endDate = addDays(today, endDay);
+    futureDateStart = addDays(today, startDay);
+    futureDateEnd = addDays(today, endDay);
+  }
 
-    if (startDate.getMonth() === endDate.getMonth()) {
-      return `${format(startDate, "d")} - ${format(endDate, "d MMM")}`;
-    } else {
-      return `${format(startDate, "d MMM")} - ${format(endDate, "d MMM")}`;
-    }
+  if (returnObject) {
+    return {
+      start: futureDateStart,
+      end: futureDateEnd,
+    };
+  }
+
+  if (futureDateStart.getMonth() === futureDateEnd.getMonth()) {
+    return `${format(futureDateStart, "d")} - ${format(
+      futureDateEnd,
+      "d MMM"
+    )}`;
+  } else {
+    return `${format(futureDateStart, "d MMM")} - ${format(
+      futureDateEnd,
+      "d MMM"
+    )}`;
   }
 }
 

@@ -107,15 +107,17 @@ defineProps({
   },
 });
 
-const formRating = ref({
-  rating: 0,
-  courierRating: 0,
-  description: "",
-  photo: [],
-  video: [],
-  showUsername: false,
+const formRating = defineModel({
+  type: Object,
+  default: () => ({
+    rating: 0,
+    courierRating: 0,
+    description: "",
+    photo: [],
+    video: [],
+    showUsername: false,
+  }),
 });
-
 const rules = {
   rating: { minValue: minValue(1), required },
   courierRating: { minValue: minValue(1), required },
@@ -123,14 +125,12 @@ const rules = {
   photo: {},
   video: {},
 };
-
 const v$ = useVuelidate(rules, formRating, {
   $autoDirty: true,
   $scope: "review",
 });
 
 const { maskText } = useMasking();
-
 const session = useSession();
 
 const captionReviewUsername = computed(

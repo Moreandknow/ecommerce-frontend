@@ -31,22 +31,37 @@
           label="Batalkan"
         />
       </div> -->
-      <div class="bg-yellow-50/30 flex justify-between px-6 py-3 items-center">
+      <div
+        v-if="lastStatus?.status === 'on_delivery'"
+        class="bg-yellow-50/30 flex justify-between px-6 py-3 items-center"
+      >
         <p class="text-black/55">
           produk diperkirakan akan sampai pada
-          <span class="underline">15-05-2025</span>
+          <span class="underline">{{ etd.start }}</span>
           -
-          <span class="underline">15-05-2025</span>
+          <span class="underline">{{ etd.end }}</span>
         </p>
-        <UButton class="min-w-56 justify-center" label="Pesanan selesai" />
+        <UButton
+          class="min-w-56 justify-center"
+          label="Pesanan selesai"
+          :loading="statusDone === 'pending'"
+          @click="handleDoneOrder"
+        />
       </div>
-      <div class="bg-yellow-50/30 flex justify-between px-6 py-3 items-center">
+      <div
+        v-if="lastStatus?.status === 'done' && canReview"
+        class="bg-yellow-50/30 flex justify-between px-6 py-3 items-center"
+      >
         <p class="text-black/55">
           Nilai pesanan sebelum
           <span class="underline">15-05-2025</span>
           dan dapatkan maks. 25 koin MoreAndKnow!
         </p>
-        <UButton class="min-w-56 justify-center" label="Nilai" />
+        <UButton
+          class="min-w-56 justify-center"
+          label="Nilai"
+          @click="handleReview"
+        />
       </div>
       <div class="px-6 py-5">
         <div class="flex justify-between items-center">
@@ -115,6 +130,12 @@
         </table>
       </div>
     </div>
+
+    <ModalReview
+      ref="modalReviewElement"
+      v-model:open="openReview"
+      @success="handleReloadData"
+    />
   </div>
 </template>
 
@@ -126,38 +147,61 @@ import {
   IconInbox,
   IconStars,
 } from "#components";
+import { addDays, differenceInDays, format } from "date-fns";
 definePageMeta({
   wrapper: "div",
 });
 
+const openReview = ref(false);
+const modalReviewElement = ref();
+
 const route = useRoute();
 const nuxtApp = useNuxtApp();
-const { data, status } = useApi(`/server/api/order/${route.params.orderId}`, {
-  key: `order-customer-${route.params.orderId}`,
-  getCachedData() {
-    return (
-      nuxtApp.payload.data?.[`order-customer-${route.params.orderId}`] ||
-      nuxtApp.static.data?.[`order-customer-${route.params.orderId}`]
-    );
-  },
-  transform(response) {
-    return response?.data || {};
-  },
-});
+const { data, status, refresh } = useApi(
+  `/server/api/order/${route.params.orderId}`,
+  {
+    key: `order-customer-${route.params.orderId}`,
+    getCachedData() {
+      return (
+        nuxtApp.payload.data?.[`order-customer-${route.params.orderId}`] ||
+        nuxtApp.static.data?.[`order-customer-${route.params.orderId}`]
+      );
+    },
+    transform(response) {
+      return response?.data || {};
+    },
+  }
+);
 
-const orderHistory = computed(() => {
-  return data.value?.status
-    ?.map((item, index, arr) => ({
-      title: item?.description,
-      time: item?.created_at,
-      active: index === arr.length - 1,
-    }))
-    .sort((a, b) => new Date(b.time) - new Date(a.time));
+const etd = computed(() => {
+  const { start, end } = getEstimate(data.value?.courier_estimation, {
+    returnObject: true,
+  });
+  return {
+    start: format(start, "dd-MM-yyyy"),
+    end: format(end, "dd-MM-yyyy"),
+  };
 });
 
 const lastStatus = computed(
   () => data.value?.status?.[(data.value?.status?.length || 0) - 1]
 );
+
+const lastReviewDate = computed(() => {
+  if (lastStatus.value?.status !== "done") return "";
+  const doneDate = new Date(lastStatus.value?.created_at);
+  const targetDate = addDays(doneDate, 1);
+
+  return format(targetDate, "dd-MM-yyyy");
+});
+
+const canReview = computed(() => {
+  if (lastStatus.value?.status !== "done") return false;
+  const endDate = new Date(lastReviewDate.value);
+  const today = new Date();
+  const diffDays = differenceInDays(endDate, today);
+  return diffDays === 0 && !data.value?.items?.[0]?.is_reviewed;
+});
 
 const timelineStatus = computed(() => {
   const pendingStatus = data.value?.status?.find(
@@ -214,6 +258,16 @@ const timelineStatus = computed(() => {
   ];
 });
 
+const orderHistory = computed(() => {
+  return data.value?.status
+    ?.map((item, index, arr) => ({
+      title: item?.description,
+      time: item?.created_at,
+      active: index === arr.length - 1,
+    }))
+    .sort((a, b) => new Date(b.time) - new Date(a.time));
+});
+
 const priceItem = computed(() => [
   {
     label: "Subtotal Produk",
@@ -256,6 +310,28 @@ const priceItem = computed(() => [
         : "QRIS",
   },
 ]);
+
+const { status: statusDone, execute: submitDone } = useSubmit(
+  computed(() => `/server/api/order/${route.params.orderId}/mark-done`)
+);
+
+function handleDoneOrder() {
+  const confirm = window.confirm(
+    "Apa anda yakin untuk menyelesaikan order ini?"
+  );
+  if (!confirm) return;
+
+  submitDone();
+}
+
+function handleReview() {
+  modalReviewElement.value.setDefaultData(data.value);
+  openReview.value = true;
+}
+
+function handleReloadData() {
+  refreshNuxtData("order-customer");
+}
 </script>
 
 <style scoped>
