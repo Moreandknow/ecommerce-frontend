@@ -64,7 +64,7 @@
       >
         <p class="text-black/55">
           Nilai pesanan sebelum
-          <span class="underline">15-05-2025</span>
+          <span class="underline">{{ lastReviewDate }}</span>
           dan dapatkan maks. 25 koin MoreAndKnow!
         </p>
         <UButton
