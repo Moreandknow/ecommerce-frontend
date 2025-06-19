@@ -119,7 +119,7 @@ const formRating = ref({
 const rules = {
   rating: { minValue: minValue(1), required },
   courierRating: { minValue: minValue(1), required },
-  description: { minLength: minLength(50), required },
+  description: {},
   photo: {},
   video: {},
 };

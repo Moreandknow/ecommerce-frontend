@@ -52,7 +52,11 @@
           </div>
         </div>
         <div
-          v-if="order?.last_status?.status === 'done'"
+          v-if="
+            order?.last_status?.status === 'done' &&
+            canReview &&
+            !order?.items?.[0]?.is_reviewed
+          "
           class="flex justify-between items-center gap-4"
         >
           <div class="text-xs">
