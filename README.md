@@ -80,3 +80,14 @@
     [x]     Integration Order List
     [x]     Integration Order List - review
     [x]     Integration Order Detail
+
+    [ ]     Integration Seller - Product - List
+    [ ]     Integration Seller - Product - Add
+    [ ]     Integration Seller - Voucher - List
+    [ ]     Integration Seller - Voucher - Add
+    [ ]     Integration Seller - Vouhcer - Edit
+    [ ]     Integration Seller - Order - List
+    [ ]     Integration Seller - Order - Detail
+    [ ]     Integration Seller - Order - Detail - Update Status
+    [ ]     Integration Seller - Wallet
+    [ ]     Integration Seller - Withdraw wallet
