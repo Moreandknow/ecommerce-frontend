@@ -46,7 +46,7 @@
         class="bg-yellow-50/30 flex justify-between px-6 py-3 items-center"
       >
         <p class="text-black/55">
-          produk diperkirakan akan sampai pada
+          Produk diperkirakan akan sampai pada
           <span class="underline">{{ etd.start }}</span>
           -
           <span class="underline">{{ etd.end }}</span>
@@ -77,7 +77,7 @@
         <div class="flex justify-between items-center">
           <p class="text-xl">Alamat Pengiriman</p>
           <div class="text-right text-xs text-black/55">
-            <p>SPX Hemat</p>
+            <p>MDX Hemat</p>
             <p>XXXXXXXXX</p>
           </div>
         </div>
